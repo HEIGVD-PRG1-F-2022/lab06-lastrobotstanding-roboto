@@ -1,6 +1,7 @@
 #include <libdio/display.h>
+#include <librobots.h>
 
-int main(){
+int main() {
     Display d;
     d.show("test");
 }

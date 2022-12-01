@@ -13,7 +13,15 @@ FetchContent_Declare(libdio
         )
 FetchContent_MakeAvailable(libdio)
 
-# Here are your other declarations, like `add_executable`
+
+include(FetchContent) # once in the project to include the module
+
+FetchContent_Declare(librobots
+        GIT_REPOSITORY https://github.com/HEIGVD-PRG1-F-2022/librobots.git
+        GIT_TAG v0.1.1
+        )
+FetchContent_MakeAvailable(librobots)
 
 # Replace `PROJECT` with the name of your executable
 target_link_libraries(Refactor PRIVATE libdio)
+target_link_libraries(Refactor PRIVATE librobots)
