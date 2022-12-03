@@ -4,27 +4,23 @@
 ### Class diagram
 ```mermaid
 classDiagram
-	direction TB
-	RobotState o-- Roboto
-	Game o-- RobotState
+	direction LR
+	RobotState --o Roboto
+	Game --o RobotState
 	class Roboto {
 		-vector vector~Case~ board
 		-size_t width
 		-size_t height
 		-unsigned energy
 		-unsigned power
-		+Roboto(size_t width, size_t height, unsigned energy, unsigned power)
+		+Roboto()
+		+void setConfig(size_t width, size_t height, unsigned energy, unsigned power)
 		+string action(vector~string~ updates)
 		+static string name()
 		-void extractBoard(string update)
 		-Damage receiveDamage(string update)
 		-string chooseAction()
-	}
-	class Game {
-		+const size_t size
-		-vector ~RobotState~ robots
-		+Game(unsigned nbRobots)
-		+void generateRobots(unsigned nbRobots)
+		+Case readOnBoard(int relativeX, int relativeY)
 	}
 	class RobotState {
 		-int x
@@ -38,8 +34,16 @@ classDiagram
 		+int getY()
 		+unsigned getEnergy()
 		+unsigned getPower()
-		string getLastAction()
+		+string askAction(vector~string~ updates)
+		+string getLastAction()
 	}
+	class Game {
+		+const size_t size
+		-vector ~RobotState~ robots
+		+Game(unsigned nbRobots)
+		+void generateRobots(unsigned nbRobots)
+	}
+
 ```
 
 ### Enums
@@ -56,6 +60,11 @@ struct Damage {
 }
 ```
 
+### Algorithms
+Pseudocode of roboto strategy:
+```
+
+```
 
 g++ main.cpp _deps/libdio-src/src/display.cpp -I_deps/libdio-src/include -o main
 
