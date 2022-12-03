@@ -6,3 +6,5 @@ main
 cmake_*
 *.ninja
 *.out
+.ninja_log
+.ninja_deps
