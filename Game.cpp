@@ -1,5 +1,8 @@
-//
-// Created by s4rac on 30.11.2022.
-//
-
 #include "Game.h"
+
+Game::Game(unsigned nbRobots): nbRobots(nbRobots){
+    size = nbRobots * 10;
+}
+void Game::generateRobots(unsigned nbRobots){
+
+}

@@ -1,7 +1,3 @@
-//
-// Created by s4rac on 30.11.2022.
-//
-
 #ifndef REFACTOR_GAME_H
 #define REFACTOR_GAME_H
 
@@ -14,11 +10,12 @@ using namespace std;
 
 class Game {
     vector<RobotState> robots;
-
+    unsigned nbRobots;
 public:
-    const size_t size;
+    // recoit les actions des robots, les applique, écrit les string update et les envoie aux robots
+    size_t size; //pas constant sinon le compilateur ne me laisse pas l'initialiser séparément
     Game(unsigned nbRobots); //constructeur
-    void generateRobots(); //fonction
+    void generateRobots(unsigned nbRobots); //fonction
 };
 
 
