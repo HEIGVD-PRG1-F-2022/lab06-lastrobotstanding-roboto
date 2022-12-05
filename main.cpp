@@ -1,7 +1,17 @@
+#include "Game.h"
 #include <libdio/display.h>
+#include <libdio/input.h>
 #include <librobots.h>
 
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+const int ROBOT_NUMBER = 2;
 int main() {
-    Display d;
-    d.show("test");
+    Display::init();
+    Game game(ROBOT_NUMBER);
+    game.start();
 }
