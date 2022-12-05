@@ -4,7 +4,7 @@
 ### Class diagram
 ```mermaid
 classDiagram
-	direction LR
+	direction TB
 	RobotState --o Roboto
 	Game --o RobotState
 	class Roboto {
@@ -40,8 +40,11 @@ classDiagram
 	class Game {
 		+const size_t size
 		-vector ~RobotState~ robots
+		-unsigned nbRobots
 		+Game(unsigned nbRobots)
+		+void start()
 		+void generateRobots(unsigned nbRobots)
+		+void printBoard()
 	}
 
 ```
