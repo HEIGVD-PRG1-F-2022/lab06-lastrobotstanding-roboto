@@ -1,10 +1,4 @@
-_deps
-CMakeFiles
-CMakeCache
-CMakeCache.txt
-main
-cmake_*
-*.ninja
-*.out
-.ninja_log
-.ninja_deps
+build/
+cmake-build-debug
+.idea
+.vscode
