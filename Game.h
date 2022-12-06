@@ -1,10 +1,12 @@
 #ifndef REFACTOR_GAME_H
 #define REFACTOR_GAME_H
 
-#include "RobotState.h"
+
 #include "robots/Roboto.h"
+#include "librobots/RobotState.h"
 #include <iostream>
 #include <vector>
+
 
 using namespace std;
 

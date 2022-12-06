@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class Roboto : Robot {
+class Roboto : public Robot {
     size_t width, height;
     unsigned energy, power;
     vector<vector<Case>> board;

@@ -3,7 +3,7 @@ project(Refactor)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Refactor main.cpp robots/Roboto.cpp robots/Roboto.h const.h Game.cpp Game.h RobotState.cpp RobotState.h)
+add_executable(Refactor main.cpp robots/Roboto.cpp robots/Roboto.h const.h Game.cpp Game.h)
 
 include(FetchContent) # once in the project to include the module
 

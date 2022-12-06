@@ -1,9 +1,15 @@
 #include "Game.h"
-#include "RobotState.h"
 #include <libdio/display.h>
 #include <random>
 #include <string>
 #include <vector>
+#include <cmath>
+#include <librobots/Direction.h>
+#include <librobots/Message.h>
+#include <librobots/Position.h>
+#include <librobots/Robot.h>
+#include <librobots/RobotState.h>
+
 const int BASE_ENERGY = 10;
 const int BASE_POWER = 1;
 
@@ -18,7 +24,7 @@ int getRandomNumber(int min, int max) {
 
 Game::Game(unsigned nbRobots) : nbRobots(nbRobots) {
     this->nbRobots = nbRobots;
-    size = nbRobots * 10;
+    size = sqrt(nbRobots) * 10;
 }
 
 void Game::start() {
@@ -37,13 +43,13 @@ void Game::start() {
         boardUpdate = "board " + computeBoardAsString();
         for (RobotState state: robots) {
             updates.push_back(boardUpdate);
-            action = state.askAction(updates);
+            //action = state.askAction(updates);
             updates.clear();
         }
 
         //Get and apply attacks
         for (RobotState state: robots) {
-            if (state.getLastAction())
+            //if (state.getLastAction())
         }
 
         printBoard();
@@ -56,7 +62,9 @@ void Game::generateRobots() {
     for (unsigned i = 0; i < nbRobots; i++) {
         randomX = getRandomNumber(0, (int) size - 1);
         randomY = getRandomNumber(0, (int) size - 1);
-        robots.push_back(RobotState(randomX, randomY, BASE_ENERGY, BASE_POWER, size, size));
+        Position pos(randomX, randomY, size, size);
+        Roboto unRobot(size, size, BASE_ENERGY, BASE_POWER);
+        robots.push_back(RobotState(&unRobot, pos, size, BASE_ENERGY, BASE_POWER));
     }
 }
 
@@ -66,7 +74,7 @@ vector<vector<string>> Game::buildDynamicBoard() {
     //For each RobotState we add them in the board with their number
     int index = 1;
     for (RobotState &state: robots) {
-        string &cell = board.at(state.getX()).at(state.getY());
+        string &cell = board.at(state.getPosition().getX()).at(state.getPosition().getY());
         cell = (cell != " ") ? "C" : to_string(index);//a C char is displayed when 2 robots (or more) are on the same cell
         index++;
     }
