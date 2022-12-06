@@ -2,8 +2,8 @@
 #define REFACTOR_GAME_H
 
 
-#include "robots/Roboto.h"
 #include "librobots/RobotState.h"
+#include "robots/Roboto.h"
 #include <iostream>
 #include <vector>
 
@@ -20,6 +20,7 @@ public:
     explicit Game(unsigned nbRobots);//constructeur
     void start();
     void generateRobots();//fonction
+    vector<RobotState> getLivingRobots() const;
     void printBoard();
     vector<vector<string>> buildDynamicBoard();
     string computeBoardAsString();

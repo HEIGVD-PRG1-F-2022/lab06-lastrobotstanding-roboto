@@ -1,14 +1,14 @@
 #include "Game.h"
-#include <libdio/display.h>
-#include <random>
-#include <string>
-#include <vector>
 #include <cmath>
+#include <libdio/display.h>
 #include <librobots/Direction.h>
 #include <librobots/Message.h>
 #include <librobots/Position.h>
 #include <librobots/Robot.h>
 #include <librobots/RobotState.h>
+#include <random>
+#include <string>
+#include <vector>
 
 const int BASE_ENERGY = 10;
 const int BASE_POWER = 1;
@@ -39,7 +39,13 @@ void Game::start() {
     vector<string> moves;
     vector<string> attacks;
     string action;
-    while (true) {
+    size_t iterationWithoutAttack = 0;
+    bool someRobotsAttackedInThisIteration;
+    const int MAXIMUM_ITERATION_WITHOUT_ATTACK = 100;
+
+    while (iterationWithoutAttack < MAXIMUM_ITERATION_WITHOUT_ATTACK * nbRobots && getLivingRobots().size() > 0) {
+        someRobotsAttackedInThisIteration = false;
+
         boardUpdate = "board " + computeBoardAsString();
         for (RobotState state: robots) {
             updates.push_back(boardUpdate);
@@ -48,10 +54,36 @@ void Game::start() {
         }
 
         //Get and apply attacks
-        for (RobotState state: robots) {
-            //if (state.getLastAction())
+        for (RobotState state: getLivingRobots()) {
+            Message message = state.getAction();
+            if (message.msg == MessageType::ActionAttack) {
+                Direction attackedRobotDirection = message.robots.at(0);
+                Position attackedRobotPosition = state.getPosition() + attackedRobotDirection;
+
+                //Look for a robot on the position attackedRobotPosition (if there is no robot, nothing will happen)
+                for (RobotState otherRobot: getLivingRobots()) {
+                    if (state.getPosition() == attackedRobotPosition) {
+                        someRobotsAttackedInThisIteration = true;
+                        otherRobot.actionAttack(state, attackedRobotPosition);
+                        break;//don't look for other robots as it's impossible to have other robots on the same cell (at this point)
+                    }
+                }
+            }
         }
 
+        //Get and apply moves
+        for (RobotState state: getLivingRobots()) {
+            Message message = state.getAction();
+            if (message.msg == MessageType::ActionMove) {
+                state.actionMove(message.robots.at(0));//apply the move
+            }
+            //TODO: check if there is another robot on the same position!
+            //TODO: check if there is a bonus at this position
+        }
+
+        if (someRobotsAttackedInThisIteration) {
+            iterationWithoutAttack++;
+        }
         printBoard();
         Display::clearScreen();
     }
@@ -66,6 +98,17 @@ void Game::generateRobots() {
         Roboto unRobot(size, size, BASE_ENERGY, BASE_POWER);
         robots.push_back(RobotState(&unRobot, pos, size, BASE_ENERGY, BASE_POWER));
     }
+}
+
+vector<RobotState> Game::getLivingRobots() const {
+    vector<RobotState> filteredList;
+
+    for (RobotState state: robots) {
+        if (state.isDead() == false) {
+            filteredList.push_back(state);
+        }
+    }
+    return filteredList;
 }
 
 vector<vector<string>> Game::buildDynamicBoard() {
@@ -91,7 +134,7 @@ void Game::printBoard() {
         }
         cout << endl;
     }
-    //TODO: refactor with displayGrid from libdio
+    //TODO: refactor with displayGrid from
     // Display::DString h;
     // h.displayGrid<string>(board, true);
     // h.print();
