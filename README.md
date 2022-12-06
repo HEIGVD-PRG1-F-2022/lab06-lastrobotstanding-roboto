@@ -22,21 +22,6 @@ classDiagram
 		-string chooseAction()
 		+Case readOnBoard(int relativeX, int relativeY)
 	}
-	class RobotState {
-		-int x
-		-int y
-		-unsigned energy
-		-unsigned power
-		-Roboto robot
-		-string lastAction
-		+RobotState(int x, int y, unsigned energy, unsigned power, size_t width, size_t height)
-		+int getX()
-		+int getY()
-		+unsigned getEnergy()
-		+unsigned getPower()
-		+string askAction(vector~string~ updates)
-		+string getLastAction()
-	}
 	class Game {
 		+const size_t size
 		-vector ~RobotState~ robots
@@ -45,8 +30,9 @@ classDiagram
 		+void start()
 		+void generateRobots(unsigned nbRobots)
 		+void printBoard()
+		+vector vector~string~ buildDynamicBoard()
+		+string computeBoardAsString()
 	}
-
 ```
 
 ### Enums
