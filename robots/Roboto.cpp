@@ -15,7 +15,7 @@ void Roboto::setConfig(size_t w, size_t h, unsigned e, unsigned p){
 string Roboto::action(vector<string> updates){
 
 }
-string Roboto::name(){
+string Roboto::name() const {
     return "NomDeNotreRobot";
 }
 Case Roboto::readOnBoard(int relativeX, int relativeY){
