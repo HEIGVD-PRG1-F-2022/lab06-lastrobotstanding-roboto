@@ -19,6 +19,8 @@ public:
     void start();
     void generateRobots();//fonction
     void printBoard();
+    vector<vector<string>> buildDynamicBoard();
+    string computeBoardAsString();
 };
 
 
