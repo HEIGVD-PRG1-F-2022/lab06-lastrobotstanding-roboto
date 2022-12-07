@@ -8,10 +8,8 @@
 #include <vector>
 
 
-using namespace std;
-
 class Game {
-    vector<RobotState> robots;
+    std::vector<RobotState> robots;
     unsigned nbRobots;
 
 public:
@@ -20,10 +18,9 @@ public:
     explicit Game(unsigned nbRobots);//constructeur
     void start();
     void generateRobots();//fonction
-    vector<RobotState> getLivingRobots() const;
+    std::vector<RobotState *> getLivingRobots();
     void printBoard();
-    vector<vector<string>> buildDynamicBoard();
-    string computeBoardAsString();
+    std::vector<std::vector<std::string>> buildDynamicBoard();
 };
 
 

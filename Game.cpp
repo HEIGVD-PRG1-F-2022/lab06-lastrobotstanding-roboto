@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <chrono>
 #include <cmath>
 #include <libdio/display.h>
 #include <librobots/Direction.h>
@@ -8,10 +9,13 @@
 #include <librobots/RobotState.h>
 #include <random>
 #include <string>
+#include <thread>
 #include <vector>
 
 const int BASE_ENERGY = 10;
 const int BASE_POWER = 1;
+
+using namespace std;
 
 //Function taken from this snippet https://stackoverflow.com/a/19728404
 int getRandomNumber(int min, int max) {
@@ -34,37 +38,47 @@ void Game::start() {
     generateRobots();
 
     //game loop
-    string boardUpdate;
-    vector<string> updates;
-    vector<string> moves;
-    vector<string> attacks;
-    string action;
     size_t iterationWithoutAttack = 0;
     bool someRobotsAttackedInThisIteration;
     const int MAXIMUM_ITERATION_WITHOUT_ATTACK = 100;
 
-    while (iterationWithoutAttack < MAXIMUM_ITERATION_WITHOUT_ATTACK * nbRobots && getLivingRobots().size() > 0) {
+    while (iterationWithoutAttack < MAXIMUM_ITERATION_WITHOUT_ATTACK * nbRobots && getLivingRobots().size() > 1) {
         someRobotsAttackedInThisIteration = false;
 
-        boardUpdate = "board " + computeBoardAsString();
-        for (RobotState state: robots) {
-            updates.push_back(boardUpdate);
-            //action = state.askAction(updates);
-            updates.clear();
+        //Build a list of all living robots positions
+        vector<Position> positions;
+        for (const RobotState *state: getLivingRobots()) {
+            positions.push_back(state->getPosition());
         }
 
+        //Call action() on all robots with the board update (other updates are already present in the RobotState object)
+        size_t index = 0;
+        for (RobotState *state: getLivingRobots()) {
+            cout << "board msg: " << Message::updateBoard(positions).at(index) << " and index " << index << endl;
+
+            state->sendUpdate(Message::updateBoard(positions).at(index));
+            cout << "Action after sendUpdate() : " << (int) state->getAction().msg << endl;
+            index++;
+        }
+
+        cout << "-- start manage coups" << endl;
+
         //Get and apply attacks
-        for (RobotState state: getLivingRobots()) {
-            Message message = state.getAction();
+        //TODO: should state be a const ref ??
+        for (RobotState *state: getLivingRobots()) {
+            Message message = state->getAction();
+            cout << "Action at apply attacks : " << (int) state->getAction().msg << endl;
+
             if (message.msg == MessageType::ActionAttack) {
                 Direction attackedRobotDirection = message.robots.at(0);
-                Position attackedRobotPosition = state.getPosition() + attackedRobotDirection;
+                Position attackedRobotPosition = state->getPosition() + attackedRobotDirection;
 
                 //Look for a robot on the position attackedRobotPosition (if there is no robot, nothing will happen)
-                for (RobotState otherRobot: getLivingRobots()) {
-                    if (state.getPosition() == attackedRobotPosition) {
+                cout << "Action on apply attack : " << (int) state->getAction().msg << endl;
+                for (RobotState *otherRobot: getLivingRobots()) {
+                    if (state->getPosition() == attackedRobotPosition) {
                         someRobotsAttackedInThisIteration = true;
-                        otherRobot.actionAttack(state, attackedRobotPosition);
+                        otherRobot->actionAttack(*state, attackedRobotPosition);
                         break;//don't look for other robots as it's impossible to have other robots on the same cell (at this point)
                     }
                 }
@@ -72,10 +86,13 @@ void Game::start() {
         }
 
         //Get and apply moves
-        for (RobotState state: getLivingRobots()) {
-            Message message = state.getAction();
+        for (RobotState *state: getLivingRobots()) {
+            Message message = state->getAction();
+            cout << "message enum is " << (int) message.msg << endl;
+
             if (message.msg == MessageType::ActionMove) {
-                state.actionMove(message.robots.at(0));//apply the move
+                cout << "message enum is a move!" << (int) message.msg << endl;
+                state->actionMove(message.robots.at(0));//apply the move
             }
             //TODO: check if there is another robot on the same position!
             //TODO: check if there is a bonus at this position
@@ -85,7 +102,10 @@ void Game::start() {
             iterationWithoutAttack++;
         }
         printBoard();
+        std::this_thread::sleep_for(100ms);//little sleep before next reload
+
         Display::clearScreen();
+        cout << "hey loop tour" << endl;
     }
 }
 
@@ -95,17 +115,21 @@ void Game::generateRobots() {
         randomX = getRandomNumber(0, (int) size - 1);
         randomY = getRandomNumber(0, (int) size - 1);
         Position pos(randomX, randomY, size, size);
-        Roboto unRobot(size, size, BASE_ENERGY, BASE_POWER);
-        robots.push_back(RobotState(&unRobot, pos, size, BASE_ENERGY, BASE_POWER));
+        // Roboto unRobot = new Roboto();
+        // unRobot.setConfig(size, size, BASE_ENERGY, BASE_POWER);
+        // Roboto unRobot(size, size, BASE_ENERGY, BASE_POWER);
+        Roboto *robot = new Roboto(size, size, BASE_ENERGY, BASE_POWER);
+        robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
     }
 }
 
-vector<RobotState> Game::getLivingRobots() const {
-    vector<RobotState> filteredList;
+vector<RobotState *> Game::getLivingRobots() {
+    vector<RobotState *> filteredList;
 
-    for (RobotState state: robots) {
+    //TODO: refactor with copy_if()
+    for (RobotState &state: robots) {
         if (state.isDead() == false) {
-            filteredList.push_back(state);
+            filteredList.push_back(&state);
         }
     }
     return filteredList;
@@ -116,8 +140,8 @@ vector<vector<string>> Game::buildDynamicBoard() {
 
     //For each RobotState we add them in the board with their number
     int index = 1;
-    for (RobotState &state: robots) {
-        string &cell = board.at(state.getPosition().getX()).at(state.getPosition().getY());
+    for (RobotState *state: getLivingRobots()) {
+        string &cell = board.at(state->getPosition().getX()).at(state->getPosition().getY());
         cell = (cell != " ") ? "C" : to_string(index);//a C char is displayed when 2 robots (or more) are on the same cell
         index++;
     }
@@ -128,25 +152,7 @@ void Game::printBoard() {
     //Create an empty board
     vector<vector<string>> board = buildDynamicBoard();
 
-    for (auto line: board) {
-        for (auto cell: line) {
-            cout << cell;
-        }
-        cout << endl;
-    }
-    //TODO: refactor with displayGrid from
-    // Display::DString h;
-    // h.displayGrid<string>(board, true);
-    // h.print();
-}
-
-string Game::computeBoardAsString() {
-    vector<vector<string>> board = buildDynamicBoard();
-    string msg;
-    for (auto line: board) {
-        for (auto cell: line) {
-            msg += cell;
-        }
-    }
-    return msg;
+    Display::DString h = Display::displayGrid<string>(board, false);
+    h.print();
+    cout << "heyll";
 }
