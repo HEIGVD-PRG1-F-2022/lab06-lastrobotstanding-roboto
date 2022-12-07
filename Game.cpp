@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "helper.h"
 #include <chrono>
 #include <cmath>
 #include <libdio/display.h>
@@ -16,15 +17,6 @@ const int BASE_ENERGY = 10;
 const int BASE_POWER = 1;
 
 using namespace std;
-
-//Function taken from this snippet https://stackoverflow.com/a/19728404
-int getRandomNumber(int min, int max) {
-    std::random_device rd;                           // Only used once to initialise (seed) engine
-    std::mt19937 rng(rd());                          // Random-number engine used (Mersenne-Twister in this case)
-    std::uniform_int_distribution<int> uni(min, max);// Guaranteed unbiased
-    auto random_integer = uni(rng);
-    return random_integer;
-}
 
 Game::Game(unsigned nbRobots) : nbRobots(nbRobots) {
     this->nbRobots = nbRobots;
