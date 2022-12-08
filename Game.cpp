@@ -32,6 +32,7 @@ void Game::start() {
     size_t iterationWithoutAttack = 0;
     bool someRobotsAttackedInThisIteration;
     const int MAXIMUM_ITERATION_WITHOUT_ATTACK = 100;
+    const std::chrono::milliseconds SLEEP_TIME_BETWEEN_LOOP(100);
 
     while (iterationWithoutAttack < MAXIMUM_ITERATION_WITHOUT_ATTACK * nbRobots && getLivingRobots().size() > 1) {
         someRobotsAttackedInThisIteration = false;
@@ -56,20 +57,16 @@ void Game::start() {
             //setcolor white
         }
 
-        cout << "-- start manage coups" << endl;
-
         //Get and apply attacks
         //TODO: should state be a const ref ??
         for (RobotState *state: getLivingRobots()) {
             Message message = state->getAction();
-            cout << "Action at apply attacks : " << (int) state->getAction().msg << endl;
 
             if (message.msg == MessageType::ActionAttack) {
                 Direction attackedRobotDirection = message.robots.at(0);
                 Position attackedRobotPosition = state->getPosition() + attackedRobotDirection;
 
                 //Look for a robot on the position attackedRobotPosition (if there is no robot, nothing will happen)
-                cout << "Action on apply attack : " << (int) state->getAction().msg << endl;
                 for (RobotState *otherRobot: getLivingRobots()) {
                     if (state->getPosition() == attackedRobotPosition) {
                         someRobotsAttackedInThisIteration = true;
@@ -83,10 +80,8 @@ void Game::start() {
         //Get and apply moves
         for (RobotState *state: getLivingRobots()) {
             Message message = state->getAction();
-            cout << "message enum is " << (int) message.msg << endl;
 
             if (message.msg == MessageType::ActionMove) {
-                cout << "message enum is a move!" << (int) message.msg << endl;
                 state->actionMove(message.robots.at(0));//apply the move
             }
             //TODO: check if there is another robot on the same position!
@@ -97,10 +92,9 @@ void Game::start() {
             iterationWithoutAttack++;
         }
         printBoard();
-        std::this_thread::sleep_for(100ms);//little sleep before next reload
+        std::this_thread::sleep_for(SLEEP_TIME_BETWEEN_LOOP);//little sleep before next reload
 
         Display::clearScreen();
-        cout << "hey loop tour" << endl;
     }
 }
 
@@ -147,7 +141,12 @@ void Game::printBoard() {
     //Create an empty board
     vector<vector<string>> board = buildDynamicBoard();
 
-    Display::DString h = Display::displayGrid<string>(board, false);
-    h.print();
-    cout << "heyll";
+    //TODO: colorize cases depending on the robot name to differient robot classes
+    Display::DString d(Display::Color::GREEN);
+    d << "LastRobotStanding - Game in progress...\n\n";
+    d.setColor(Display::Color::WHITE);
+    d << Display::displayGrid<string>(board, false);
+    d.print();
+
+    //TODO: call the print stats method here
 }
