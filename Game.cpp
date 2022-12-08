@@ -27,7 +27,6 @@ int getRandomNumber(int min, int max) {
 }
 
 Game::Game(unsigned nbRobots) : nbRobots(nbRobots) {
-    this->nbRobots = nbRobots;
     size = sqrt(nbRobots) * 10;
 }
 
@@ -54,11 +53,14 @@ void Game::start() {
         //Call action() on all robots with the board update (other updates are already present in the RobotState object)
         size_t index = 0;
         for (RobotState *state: getLivingRobots()) {
-            cout << "board msg: " << Message::updateBoard(positions).at(index) << " and index " << index << endl;
+            //cout << "board msg: " << Message::updateBoard(positions).at(index) << " and index " << index << endl;
 
             state->sendUpdate(Message::updateBoard(positions).at(index));
-            cout << "Action after sendUpdate() : " << (int) state->getAction().msg << endl;
+            cout << endl;
+            //switch
+            cout << "\x1b[38;5;40m" << index << " - Robot: " << state->getPosition() << " - Energy: " << state->getEnergy() << " - Power: " << state->getPower() << " - Move: " << (int) state->getAction().msg << "\x1b[38;5;15m" << endl;
             index++;
+            //setcolor white
         }
 
         cout << "-- start manage coups" << endl;
@@ -98,7 +100,7 @@ void Game::start() {
             //TODO: check if there is a bonus at this position
         }
 
-        if (someRobotsAttackedInThisIteration) {
+        if (!someRobotsAttackedInThisIteration) {
             iterationWithoutAttack++;
         }
         printBoard();
@@ -128,7 +130,7 @@ vector<RobotState *> Game::getLivingRobots() {
 
     //TODO: refactor with copy_if()
     for (RobotState &state: robots) {
-        if (state.isDead() == false) {
+        if (!state.isDead()) {
             filteredList.push_back(&state);
         }
     }
