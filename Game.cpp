@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "helper.h"
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <libdio/display.h>
@@ -32,7 +33,7 @@ void Game::start() {
     size_t iterationWithoutAttack = 0;
     bool someRobotsAttackedInThisIteration;
     const int MAXIMUM_ITERATION_WITHOUT_ATTACK = 100;
-    const std::chrono::milliseconds SLEEP_TIME_BETWEEN_LOOP(100);
+    const std::chrono::milliseconds SLEEP_TIME_BETWEEN_LOOP(50);
 
     while (iterationWithoutAttack < MAXIMUM_ITERATION_WITHOUT_ATTACK * nbRobots && getLivingRobots().size() > 1) {
         someRobotsAttackedInThisIteration = false;
@@ -68,7 +69,7 @@ void Game::start() {
 
                 //Look for a robot on the position attackedRobotPosition (if there is no robot, nothing will happen)
                 for (RobotState *otherRobot: getLivingRobots()) {
-                    if (state->getPosition() == attackedRobotPosition) {
+                    if (otherRobot->getPosition() == attackedRobotPosition) {
                         someRobotsAttackedInThisIteration = true;
                         otherRobot->actionAttack(*state, attackedRobotPosition);
                         break;//don't look for other robots as it's impossible to have other robots on the same cell (at this point)
@@ -84,18 +85,55 @@ void Game::start() {
             if (message.msg == MessageType::ActionMove) {
                 state->actionMove(message.robots.at(0));//apply the move
             }
+
             //TODO: check if there is another robot on the same position!
             //TODO: check if there is a bonus at this position
+        }
+
+        //After moves, check collisions (2 robots on the same case) and apply rules of collision
+        vector<RobotState *> livingRobots = getLivingRobots();
+        int count = 0;
+        for (size_t i = 0; i < livingRobots.size(); i++) {
+            RobotState *oneRobot = livingRobots.at(i);//TODO: should we declare the variable before ?
+            for (size_t j = i + 1; j < livingRobots.size(); j++) {
+                RobotState *otherRobot = livingRobots.at(j);
+
+                //If 2 robots are on the same position, manage collisions
+                if (oneRobot->getPosition() == otherRobot->getPosition()) {
+                    oneRobot->checkCollision(*otherRobot);//check and apply collision
+                }
+                count++;
+            }
         }
 
         if (!someRobotsAttackedInThisIteration) {
             iterationWithoutAttack++;
         }
+
         printBoard();
         std::this_thread::sleep_for(SLEEP_TIME_BETWEEN_LOOP);//little sleep before next reload
 
         Display::clearScreen();
     }
+
+    //TODO: display the winner
+    printBoard();
+    vector<RobotState *> finalLivingRobots = getLivingRobots();
+    if (finalLivingRobots.size() == 1) {
+        d.setColor(Display::Color::ORANGE);
+        d << "The winner is " << finalLivingRobots.at(0)->getName() << "\n";
+    } else {
+        d.setColor(Display::Color::BLUE);
+        d << "The game stopped because " << (100 * nbRobots) << " turns have happened without any attack...\n";
+        int index = 0;
+        for (RobotState *finalRobot: finalLivingRobots) {
+            d << index << ". " << finalRobot->getName();
+            //TODO: use statistic method here to have details about the robot
+            index++;
+        }
+    }
+
+    d.print();
 }
 
 void Game::generateRobots() {
@@ -141,11 +179,12 @@ void Game::printBoard() {
     //Create an empty board
     vector<vector<string>> board = buildDynamicBoard();
 
+    //TODO: use cursor position to have a smooth animation
     //TODO: colorize cases depending on the robot name to differient robot classes
     Display::DString d(Display::Color::GREEN);
     d << "LastRobotStanding - Game in progress...\n\n";
     d.setColor(Display::Color::WHITE);
-    d << Display::displayGrid<string>(board, false);
+    d << Display::displayGrid<string>(board, true);
     d.print();
 
     //TODO: call the print stats method here
