@@ -58,6 +58,7 @@ void Game::start() {
             state->sendUpdate(Message::updateBoard(positions).at(index));
             cout << endl;
             //switch
+
             cout << "\x1b[38;5;40m" << index << " - Robot: " << state->getPosition() << " - Energy: " << state->getEnergy() << " - Power: " << state->getPower() << " - Move: " << (int) state->getAction().msg << "\x1b[38;5;15m" << endl;
             index++;
             //setcolor white
