@@ -13,6 +13,8 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <windows.h>
+#include <iomanip>
 
 const int BASE_ENERGY = 10;
 const int BASE_POWER = 1;
@@ -33,6 +35,7 @@ void Game::start() {
     size_t iterationWithoutAttack = 0;
     bool someRobotsAttackedInThisIteration;
     const int MAXIMUM_ITERATION_WITHOUT_ATTACK = 100;
+    unsigned iterationCount = 0;
     const std::chrono::milliseconds SLEEP_TIME_BETWEEN_LOOP(50);
 
     while (iterationWithoutAttack < MAXIMUM_ITERATION_WITHOUT_ATTACK * nbRobots && getLivingRobots().size() > 1) {
@@ -47,15 +50,9 @@ void Game::start() {
         //Call action() on all robots with the board update (other updates are already present in the RobotState object)
         size_t index = 0;
         for (RobotState *state: getLivingRobots()) {
-            //cout << "board msg: " << Message::updateBoard(positions).at(index) << " and index " << index << endl;
-
             state->sendUpdate(Message::updateBoard(positions).at(index));
             cout << endl;
-            //switch
-
-            cout << "\x1b[38;5;40m" << index << " - Robot: " << state->getPosition() << " - Energy: " << state->getEnergy() << " - Power: " << state->getPower() << " - Move: " << (int) state->getAction().msg << "\x1b[38;5;15m" << endl;
             index++;
-            //setcolor white
         }
 
         //Get and apply attacks
@@ -109,14 +106,15 @@ void Game::start() {
             iterationWithoutAttack++;
         }
 
-        printBoard();
+        printBoard(iterationCount);
         std::this_thread::sleep_for(SLEEP_TIME_BETWEEN_LOOP);//little sleep before next reload
 
         Display::clearScreen();
+        iterationCount++;
     }
 
     //TODO: display the winner
-    printBoard();
+    printBoard(iterationCount);
     vector<RobotState *> finalLivingRobots = getLivingRobots();
     if (finalLivingRobots.size() == 1) {
         d.setColor(Display::Color::ORANGE);
@@ -133,6 +131,8 @@ void Game::start() {
     }
 
     d.print();
+
+    system("pause");
 }
 
 void Game::generateRobots() {
@@ -174,17 +174,36 @@ vector<vector<string>> Game::buildDynamicBoard() {
     return board;
 }
 
-void Game::printBoard() {
+void Game::printBoard(unsigned iterationCount) {
     //Create an empty board
     vector<vector<string>> board = buildDynamicBoard();
 
     //TODO: use cursor position to have a smooth animation
-    //TODO: colorize cases depending on the robot name to differient robot classes
+    //TODO: colorize cases depending on the robot name to different robot classes
     Display::DString d(Display::Color::GREEN);
     d << "LastRobotStanding - Game in progress...\n\n";
     d.setColor(Display::Color::WHITE);
     d << Display::displayGrid<string>(board, true);
     d.print();
 
-    //TODO: call the print stats method here
+    printStats(iterationCount);
+}
+
+void Game::printStats(unsigned iterationCount) {
+    int index = 1;
+    for (RobotState &state: robots) {
+
+        if(state.isDead()){
+            cout << "\x1b[38;5;196m" << setw(2) << index << " - " << state.getName() << " - Cause of death: " << state.getDeathCause() << endl;
+        }
+        else{
+            cout << "\x1b[38;5;40m" << setw(2) << index << " - " << state.getName() << " "
+                 << state.getPosition() << " - Energy: " << setw(2) << state.getEnergy() << " - Power: "
+                 << setw(2) << state.getPower()<< " - Move: " << state.getAction().getMessageType()
+                 << " (" << setw(2) << state.getAction().robots[0].getdX()
+                 << "," << setw(2) << state.getAction().robots[0].getY() << ")"
+                 << "\x1b[38;5;15m" << endl;
+        }
+        index++;
+    }
 }

@@ -19,8 +19,9 @@ public:
     void start();
     void generateRobots();//fonction
     std::vector<RobotState *> getLivingRobots();
-    void printBoard();
+    void printBoard(unsigned iterationCount);
     std::vector<std::vector<std::string>> buildDynamicBoard();
+    void printStats(unsigned iterationCount);
 };
 
 
