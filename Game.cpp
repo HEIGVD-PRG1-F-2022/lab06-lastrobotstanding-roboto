@@ -56,8 +56,7 @@ void Game::start() {
         }
 
         //Get and apply attacks
-        //TODO: should state be a const ref ??
-        for (RobotState *state: getLivingRobots()) {
+        for (const RobotState *state: getLivingRobots()) {
             Message message = state->getAction();
 
             if (message.msg == MessageType::ActionAttack) {
@@ -109,7 +108,6 @@ void Game::start() {
         printBoard(iterationCount);
         std::this_thread::sleep_for(SLEEP_TIME_BETWEEN_LOOP);//little sleep before next reload
 
-        Display::clearScreen();
         iterationCount++;
     }
 
@@ -122,17 +120,17 @@ void Game::start() {
     } else {
         d.setColor(Display::Color::BLUE);
         d << "The game stopped because " << (100 * nbRobots) << " turns have happened without any attack...\n";
-        int index = 0;
+        unsigned index = 0;
         for (RobotState *finalRobot: finalLivingRobots) {
             d << index << ". " << finalRobot->getName();
-            //TODO: use statistic method here to have details about the robot
+            printStats(*finalRobot, index);
             index++;
         }
     }
 
     d.print();
 
-    system("pause");
+    //system("pause");
 }
 
 void Game::generateRobots() {
@@ -153,6 +151,8 @@ vector<RobotState *> Game::getLivingRobots() {
     vector<RobotState *> filteredList;
 
     //TODO: refactor with copy_if()
+    // doesn't work with isDead(), needs object
+    // copy_if(robots.begin(), robots.end(), filteredList.begin(), RobotState::isDead());
     for (RobotState &state: robots) {
         if (!state.isDead()) {
             filteredList.push_back(&state);
@@ -178,7 +178,12 @@ void Game::printBoard(unsigned iterationCount) {
     //Create an empty board
     vector<vector<string>> board = buildDynamicBoard();
 
+    Display::clearScreen();
+
     //TODO: use cursor position to have a smooth animation
+    // SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {0,0});
+    // => only works on WIN32 + when used, glitch at the end of the game => displays extra lines
+
     //TODO: colorize cases depending on the robot name to different robot classes
     Display::DString d(Display::Color::GREEN);
     d << "LastRobotStanding - Game in progress...\n\n";
@@ -186,24 +191,25 @@ void Game::printBoard(unsigned iterationCount) {
     d << Display::displayGrid<string>(board, true);
     d.print();
 
-    printStats(iterationCount);
+    cout << "Tour " << iterationCount << endl;
+    unsigned index = 1;
+    for(RobotState &state: robots){
+        printStats(state, index);
+        index++;
+    }
+
 }
 
-void Game::printStats(unsigned iterationCount) {
-    int index = 1;
-    for (RobotState &state: robots) {
-
-        if(state.isDead()){
-            cout << "\x1b[38;5;196m" << setw(2) << index << " - " << state.getName() << " - Cause of death: " << state.getDeathCause() << endl;
-        }
-        else{
-            cout << "\x1b[38;5;40m" << setw(2) << index << " - " << state.getName() << " "
-                 << state.getPosition() << " - Energy: " << setw(2) << state.getEnergy() << " - Power: "
-                 << setw(2) << state.getPower()<< " - Move: " << state.getAction().getMessageType()
-                 << " (" << setw(2) << state.getAction().robots[0].getdX()
-                 << "," << setw(2) << state.getAction().robots[0].getY() << ")"
-                 << "\x1b[38;5;15m" << endl;
-        }
-        index++;
+void Game::printStats(RobotState state, unsigned index) {
+    if(state.isDead()){
+        cout << "\x1b[38;5;196m" << setw(2) << index << " - " << state.getName() << " - Cause of death: " << state.getDeathCause() << endl;
+    }
+    else{
+        cout << "\x1b[38;5;40m" << setw(2) << index << " - " << state.getName() << " "
+             << state.getPosition() << " - Energy: " << setw(2) << state.getEnergy() << " - Power: "
+             << setw(2) << state.getPower()<< " - Move: " << state.getAction().getMessageType()
+             << " (" << setw(2) << state.getAction().robots[0].getdX()
+             << "," << setw(2) << state.getAction().robots[0].getY() << ")"
+             << "\x1b[38;5;15m" << endl;
     }
 }

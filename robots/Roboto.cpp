@@ -7,7 +7,7 @@
 
 using namespace std;
 
-//TODO: do we need this constructor ??
+//Need constructor for Game.cpp/generateRobots
 Roboto::Roboto(size_t width, size_t height, unsigned energy, unsigned power) : width(width), height(height), energy(energy), power(power) {
     this->width = width;
     this->height = height;
@@ -26,7 +26,6 @@ void Roboto::setConfig(size_t w, size_t h, unsigned e, unsigned p) {
 
 string Roboto::action(vector<string> updates) {
     //TODO: extract updates (board, damage, bonus) apply them and call chooseAction()
-
 
     //Dumb temporary behavior just for game development phase
     // cout << "action is move 1 -1";
@@ -59,4 +58,5 @@ string Roboto::name() const {
 // }
 string Roboto::chooseAction() {
     //TODO: Implement roboto strategy
+    return "";
 }
