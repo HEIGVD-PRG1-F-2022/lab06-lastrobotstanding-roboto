@@ -20,7 +20,7 @@ const int BASE_POWER = 1;
 using namespace std;
 
 Game::Game(unsigned nbRobots) : nbRobots(nbRobots) {
-    size = sqrt(nbRobots) * 10;
+    size = (size_t) sqrt(nbRobots) * 10;
 }
 
 void Game::start() {
@@ -85,9 +85,6 @@ void Game::start() {
             if (message.msg == MessageType::ActionMove) {
                 state->actionMove(message.robots.at(0));//apply the move
             }
-
-            //TODO: check if there is another robot on the same position!
-            //TODO: check if there is a bonus at this position
         }
 
         //After moves, check collisions (2 robots on the same case) and apply rules of collision
@@ -105,6 +102,8 @@ void Game::start() {
                 count++;
             }
         }
+
+        //TODO: check if there is a bonus at this position
 
         if (!someRobotsAttackedInThisIteration) {
             iterationWithoutAttack++;
@@ -145,7 +144,7 @@ void Game::generateRobots() {
         // Roboto unRobot = new Roboto();
         // unRobot.setConfig(size, size, BASE_ENERGY, BASE_POWER);
         // Roboto unRobot(size, size, BASE_ENERGY, BASE_POWER);
-        Roboto *robot = new Roboto(size, size, BASE_ENERGY, BASE_POWER);
+        auto *robot = new Roboto(size, size, BASE_ENERGY, BASE_POWER);
         robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
     }
 }
