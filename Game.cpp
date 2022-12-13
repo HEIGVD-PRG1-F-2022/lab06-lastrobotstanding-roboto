@@ -201,15 +201,20 @@ void Game::printBoard(unsigned iterationCount) {
 }
 
 void Game::printStats(RobotState state, unsigned index) {
-    if(state.isDead()){
-        cout << "\x1b[38;5;196m" << setw(2) << index << " - " << state.getName() << " - Cause of death: " << state.getDeathCause() << endl;
-    }
-    else{
-        cout << "\x1b[38;5;40m" << setw(2) << index << " - " << state.getName() << " "
-             << state.getPosition() << " - Energy: " << setw(2) << state.getEnergy() << " - Power: "
-             << setw(2) << state.getPower()<< " - Move: " << state.getAction().getMessageType()
-             << " (" << setw(2) << state.getAction().robots[0].getdX()
-             << "," << setw(2) << state.getAction().robots[0].getY() << ")"
-             << "\x1b[38;5;15m" << endl;
+    Display::DString stat;
+    if (state.isDead()) {
+        stat.setColor(Display::Color::RED);
+        ostringstream stream;
+        stream << setw(2) << index << " " << setw(12) << left << state.getName() << " - Cause of death: " << state.getDeathCause() << endl;
+        Display::DString stat(Display::Color::GREEN);
+        stat << stream.str();
+        stat.print();
+    } else {
+        // cout << "\x1b[38;5;40m" << setw(2) << index << " - " << state.getName() << " "
+        //      << state.getPosition() << " - Energy: " << setw(2) << state.getEnergy() << " - Power: "
+        //      << setw(2) << state.getPower() << " - Move: " << state.getAction().getMessageType()
+        //      << " (" << setw(2) << state.getAction().robots[0].getdX()
+        //      << "," << setw(2) << state.getAction().robots[0].getY() << ")"
+        //      << "\x1b[38;5;15m" << endl;
     }
 }
