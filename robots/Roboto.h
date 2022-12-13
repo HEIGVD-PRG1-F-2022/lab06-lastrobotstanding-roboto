@@ -20,8 +20,7 @@ class Roboto : public Robot {
 
 public:
     Roboto() = default;
-    Roboto(size_t width, size_t height, unsigned energy, unsigned power);//constructeur
-    void setConfig(size_t w, size_t h, unsigned e, unsigned p);
+    virtual void setConfig(size_t w, size_t h, unsigned e, unsigned p);
     std::string action(std::vector<std::string> updates);//fonction: recoit les updates(string) de game, return l'action qu'il fait en conséquence
     std::string name() const;
     // Case readOnBoard(int relativeX, int relativeY);
