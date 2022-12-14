@@ -5,17 +5,28 @@
 #ifndef REFACTOR_ROBOTO_H
 #define REFACTOR_ROBOTO_H
 
-#include "../const.h"
+#include <librobots/Message.h>
 #include <librobots/Robot.h>
 #include <string>
 #include <vector>
+
+enum Case { EMPTY,
+            SELF,
+            OTHER,
+            BONUS };
+
+struct Damage {
+    int attackerX;
+    int attackerY;
+    unsigned energyLoss;
+};
 
 class Roboto : public Robot {
     size_t width, height;
     unsigned energy, power;
     // std::vector<std::vector<Case>> board;
 
-    Damage receiveDamage(std::string update);//fonction
+    Message receiveDamage(std::string update);//fonction
     std::string chooseAction();
 
 public:
