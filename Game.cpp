@@ -170,14 +170,16 @@ vector<RobotState *> Game::getLivingRobots() {
     return filteredList;
 }
 
-vector<vector<string>> Game::buildDynamicBoard() {
-    vector<vector<string>> board = vector<vector<string>>(size, vector<string>(size, " "));
+vector<vector<Display::DString>> Game::buildDynamicBoard() {
+    vector<vector<Display::DString>> board = vector<vector<Display::DString>>(size, vector<Display::DString>(size, Display::DString()));
 
     //For each RobotState we add them in the board with their number
     int index = 1;
+    //TODO: use livingRobots of the last turn
     for (RobotState *state: getLivingRobots()) {
-        string &cell = board.at(state->getPosition().getX()).at(state->getPosition().getY());
-        cell = (cell != " ") ? "C" : to_string(index);//a C char is displayed when 2 robots (or more) are on the same cell
+        Display::DString &cell = board.at(state->getPosition().getX()).at(state->getPosition().getY());
+        cell.setColor(Display::Color::GREEN);
+        cell << to_string(index);//a C char is displayed when 2 robots (or more) are on the same cell
         index++;
     }
     return board;
@@ -185,7 +187,7 @@ vector<vector<string>> Game::buildDynamicBoard() {
 
 void Game::printBoard(unsigned iterationCount) {
     //Create an empty board
-    vector<vector<string>> board = buildDynamicBoard();
+    vector<vector<Display::DString>> board = buildDynamicBoard();
 
     Display::clearScreen();
 
@@ -195,9 +197,9 @@ void Game::printBoard(unsigned iterationCount) {
 
     //TODO: colorize cases depending on the robot name to different robot classes
     Display::DString d(Display::Color::GREEN);
-    d << "LastRobotStanding - Game in progress...\n\n";
+    d << "LastRobotStanding - Game in progress...\n";
     d.setColor(Display::Color::WHITE);
-    d << Display::displayGrid<string>(board, true);
+    d << Display::displayGrid<Display::DString>(board, true);
     d.print();
 
     cout << "Tour " << iterationCount << endl;
