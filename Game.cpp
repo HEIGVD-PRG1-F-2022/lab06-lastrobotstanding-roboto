@@ -214,7 +214,6 @@ void Game::printStat(RobotState state, unsigned index) {
            << setw(5) << left << state.getPower() << " ";
     if (state.isDead()) {
         stat.setColor(Display::Color::RED);
-
         stream << state.getDeathCause() << endl;
     } else {
         stat.setColor(Display::Color::GREEN);
