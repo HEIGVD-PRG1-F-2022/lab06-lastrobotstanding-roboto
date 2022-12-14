@@ -12,6 +12,7 @@
 
 class Game {
     std::vector<RobotState> robots;
+    std::vector<Position> boni;
     unsigned nbRobots;
 
 public:
@@ -25,6 +26,7 @@ public:
     std::vector<std::vector<Display::DString>> buildDynamicBoard();
     void printStats();
     void printStat(RobotState state, unsigned index);
+    void ourClearScreen();
 };
 
 
