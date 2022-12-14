@@ -159,9 +159,6 @@ void Game::generateRobots(vector<RobotPack> robotPacks) {
 vector<RobotState *> Game::getLivingRobots() {
     vector<RobotState *> filteredList;
 
-    //TODO: refactor with copy_if()
-    // doesn't work with isDead(), needs object
-    // copy_if(robots.begin(), robots.end(), filteredList.begin(), RobotState::isDead());
     for (RobotState &state: robots) {
         if (!state.isDead()) {
             filteredList.push_back(&state);
@@ -189,7 +186,8 @@ void Game::printBoard(unsigned iterationCount) {
     //Create an empty board
     vector<vector<Display::DString>> board = buildDynamicBoard();
 
-    Display::clearScreen();
+    // Display::clearScreen();
+    printf("%c[%d;%df", 0x1B, 0, 0);
 
     //TODO: use cursor position to have a smooth animation
     // SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {0,0});
