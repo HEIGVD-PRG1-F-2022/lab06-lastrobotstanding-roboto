@@ -13,7 +13,7 @@
 #include <string>
 #include <thread>
 #include <vector>
-#include <windows.h>
+//#include <windows.h>
 #include <iomanip>
 
 const int BASE_ENERGY = 10;
@@ -123,7 +123,7 @@ void Game::start() {
         unsigned index = 0;
         for (RobotState *finalRobot: finalLivingRobots) {
             d << index << ". " << finalRobot->getName();
-            printStats(*finalRobot, index);
+            printStat(*finalRobot, index);
             index++;
         }
     }
@@ -192,29 +192,36 @@ void Game::printBoard(unsigned iterationCount) {
     d.print();
 
     cout << "Tour " << iterationCount << endl;
-    unsigned index = 1;
-    for(RobotState &state: robots){
-        printStats(state, index);
-        index++;
-    }
-
+    printStats();
 }
 
-void Game::printStats(RobotState state, unsigned index) {
+void Game::printStats() {
+    cout << "id " << setw(14) << left << "Name "  << setw(5) << left << "pos"
+    << "Energy " << "Power " << "Move/Cause of death" << endl;
+    unsigned index = 1;
+    for(RobotState &state: robots){
+        printStat(state, index);
+        index++;
+    };
+}
+
+void Game::printStat(RobotState state, unsigned index) {
     Display::DString stat;
+    ostringstream stream;
+    stream << setw(2) << index << " " << setw(12) << left << state.getName() << " "
+           << state.getPosition() << " "
+           << setw(6) << left << state.getEnergy() << " "
+           << setw(5) << left << state.getPower() << " ";
     if (state.isDead()) {
         stat.setColor(Display::Color::RED);
-        ostringstream stream;
-        stream << setw(2) << index << " " << setw(12) << left << state.getName() << " - Cause of death: " << state.getDeathCause() << endl;
-        Display::DString stat(Display::Color::GREEN);
-        stat << stream.str();
-        stat.print();
+
+        stream << state.getDeathCause() << endl;
     } else {
-        // cout << "\x1b[38;5;40m" << setw(2) << index << " - " << state.getName() << " "
-        //      << state.getPosition() << " - Energy: " << setw(2) << state.getEnergy() << " - Power: "
-        //      << setw(2) << state.getPower() << " - Move: " << state.getAction().getMessageType()
-        //      << " (" << setw(2) << state.getAction().robots[0].getdX()
-        //      << "," << setw(2) << state.getAction().robots[0].getY() << ")"
-        //      << "\x1b[38;5;15m" << endl;
+        stat.setColor(Display::Color::GREEN);
+        stream << state.getAction().getMessageType()
+               << " (" << setw(2) << state.getAction().robots[0].getdX()
+               << "," << setw(2) << state.getAction().robots[0].getY() << ")" << endl;
     }
+    stat << stream.str();
+    stat.print();
 }

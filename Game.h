@@ -21,7 +21,8 @@ public:
     std::vector<RobotState *> getLivingRobots();
     void printBoard(unsigned iterationCount);
     std::vector<std::vector<std::string>> buildDynamicBoard();
-    void printStats(RobotState state, unsigned index);
+    void printStats();
+    void printStat(RobotState state, unsigned index);
 };
 
 
