@@ -2,15 +2,15 @@
 // Created by s4rac on 30.11.2022.
 //
 
-#ifndef REFACTOR_ROBOTO_H
-#define REFACTOR_ROBOTO_H
+#ifndef RANDOM_ROBOT_H
+#define RANDOM_ROBOT_H
 
 #include "../const.h"
 #include <librobots/Robot.h>
 #include <string>
 #include <vector>
 
-class Roboto : public Robot {
+class RandomRoboto : public Robot {
     size_t width, height;
     unsigned energy, power;
     // std::vector<std::vector<Case>> board;
@@ -19,7 +19,7 @@ class Roboto : public Robot {
     std::string chooseAction();
 
 public:
-    Roboto() = default;
+    RandomRoboto() = default;
     virtual void setConfig(size_t w, size_t h, unsigned e, unsigned p);
     std::string action(std::vector<std::string> updates);//fonction: recoit les updates(string) de game, return l'action qu'il fait en conséquence
     std::string name() const;
@@ -27,4 +27,4 @@ public:
 };
 
 
-#endif//REFACTOR_ROBOTO_H
+#endif//RANDOM_ROBOT_H

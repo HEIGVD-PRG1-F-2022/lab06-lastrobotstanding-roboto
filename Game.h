@@ -16,8 +16,8 @@ public:
     // recoit les actions des robots, les applique, écrit les string update et les envoie aux robots
     size_t size;                     //pas constant sinon le compilateur ne me laisse pas l'initialiser séparément
     explicit Game(unsigned nbRobots);//constructeur
-    void start();
-    void generateRobots();//fonction
+    void start(std::vector<RobotPack> robotPacks);
+    void generateRobots(std::vector<RobotPack> robotPacks);//fonction
     std::vector<RobotState *> getLivingRobots();
     void printBoard(unsigned iterationCount);
     std::vector<std::vector<std::string>> buildDynamicBoard();

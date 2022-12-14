@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "helper.h"
+#include "robots/RandomRoboto.h"
+#include "robots/Roboto.h"
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -25,11 +27,11 @@ Game::Game(unsigned nbRobots) : nbRobots(nbRobots) {
     size = (size_t) sqrt(nbRobots) * 10;
 }
 
-void Game::start() {
+void Game::start(vector<RobotPack> robotPacks) {
     Display::DString d(Display::Color::GREEN);
     d << "Welcome in LastRobotStanding, the fight has started...\n";
     d.print();
-    generateRobots();
+    generateRobots(robotPacks);
 
     //game loop
     size_t iterationWithoutAttack = 0;
@@ -133,17 +135,24 @@ void Game::start() {
     //system("pause");
 }
 
-void Game::generateRobots() {
-    int randomX, randomY;
-    for (unsigned i = 0; i < nbRobots; i++) {
-        randomX = getRandomNumber(0, (int) size - 1);
-        randomY = getRandomNumber(0, (int) size - 1);
-        Position pos(randomX, randomY, size, size);
-        // Roboto unRobot = new Roboto();
-        // unRobot.setConfig(size, size, BASE_ENERGY, BASE_POWER);
-        // Roboto unRobot(size, size, BASE_ENERGY, BASE_POWER);
-        auto *robot = new Roboto(size, size, BASE_ENERGY, BASE_POWER);
-        robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
+void Game::generateRobots(vector<RobotPack> robotPacks) {
+    for (const RobotPack &pack: robotPacks) {
+        int randomX, randomY;
+        for (int i = 0; i <= pack.number; i++) {
+            randomX = getRandomNumber(0, (int) size - 1);
+            randomY = getRandomNumber(0, (int) size - 1);
+            Position pos(randomX, randomY, size, size);
+
+            if (pack.className == "RandomRoboto") {
+                auto *robot = new RandomRoboto();
+                robot->setConfig(size, size, BASE_ENERGY, BASE_POWER);
+                robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
+            } else if (pack.className == "Roboto") {
+                auto *robot = new Roboto();
+                robot->setConfig(size, size, BASE_ENERGY, BASE_POWER);
+                robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
+            }
+        }
     }
 }
 

@@ -7,14 +7,6 @@
 
 using namespace std;
 
-//Need constructor for Game.cpp/generateRobots
-Roboto::Roboto(size_t width, size_t height, unsigned energy, unsigned power) : width(width), height(height), energy(energy), power(power) {
-    this->width = width;
-    this->height = height;
-    this->energy = energy;
-    this->power = power;
-}
-
 void Roboto::setConfig(size_t w, size_t h, unsigned e, unsigned p) {
     width = w;
     height = h;
