@@ -2,6 +2,8 @@
 #define REFACTOR_GAME_H
 
 
+#include "helper.h"
+#include "libdio/display.h"
 #include "librobots/RobotState.h"
 #include "robots/Roboto.h"
 #include <iostream>
@@ -20,7 +22,7 @@ public:
     void generateRobots(std::vector<RobotPack> robotPacks);//fonction
     std::vector<RobotState *> getLivingRobots();
     void printBoard(unsigned iterationCount);
-    std::vector<std::vector<std::string>> buildDynamicBoard();
+    std::vector<std::vector<Display::DString>> buildDynamicBoard();
     void printStats();
     void printStat(RobotState state, unsigned index);
 };
