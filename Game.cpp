@@ -49,6 +49,10 @@ void Game::start(vector<RobotPack> robotPacks) {
         if (iterationCount % (20 / nbRobots) == 0) {
             BonusType type = (getRandomNumber(0, 1) == 0 ? BonusType::Energy : BonusType::Power);
             Bonus bonus(size, size, (type == BonusType::Energy ? BONUS_MAX_ENERGY : BONUS_MAX_POWER), type);
+            boni.push_back(bonus);
+            for (RobotState *state: getLivingRobots()) {
+                state->actionBonus(bonus.pos);
+            }
         }
 
         //Build a list of all living robots positions
@@ -57,10 +61,15 @@ void Game::start(vector<RobotPack> robotPacks) {
             positions.push_back(state->getPosition());
         }
 
+        vector<Position> boniPos;
+        for (auto b: boni) {
+            boniPos.push_back(b.pos);
+        }
         //Call action() on all robots with the board update (other updates are already present in the RobotState object)
+
         size_t index = 0;
         for (RobotState *state: getLivingRobots()) {
-            state->sendUpdate(Message::updateBoard(positions, boni).at(index));
+            state->sendUpdate(Message::updateBoard(positions, boniPos).at(index));
             cout << endl;
             index++;
         }
@@ -110,6 +119,18 @@ void Game::start(vector<RobotPack> robotPacks) {
         }
 
         //TODO: check if there is a bonus at this position
+        for (auto rob: livingRobots) {
+            for (auto it = boni.begin(); it != boni.end(); it++) {
+                if (rob->getPosition() == it->pos) {
+                    if (it->type == BonusType::Energy) {
+                        rob->actionEnergy(it->value);
+                    } else {
+                        rob->actionPower(it->value);
+                    }
+                    boni.erase(it);
+                }
+            }
+        }
 
         if (!someRobotsAttackedInThisIteration) {
             iterationWithoutAttack++;
@@ -182,12 +203,20 @@ vector<vector<Display::DString>> Game::buildDynamicBoard() {
     //For each RobotState we add them in the board with their number
     int index = 1;
     //TODO: use livingRobots of the last turn
-    for (RobotState *state: getLivingRobots()) {
-        Display::DString &cell = board.at(state->getPosition().getX()).at(state->getPosition().getY());
-        cell.setColor(Display::Color::GREEN);
-        cell << to_string(index);//a C char is displayed when 2 robots (or more) are on the same cell
+    for (RobotState state: robots) {
+        if (!state.isDead()) {
+            Display::DString &cell = board.at(state.getPosition().getX()).at(state.getPosition().getY());
+            cell.setColor(Display::Color::GREEN);
+            cell << to_string(index);
+        }
         index++;
     }
+    for (const Bonus &bonus: boni) {
+        Display::DString &cell = board.at(bonus.pos.getX()).at(bonus.pos.getY());
+        cell.setColor(Display::Color::YELLOW);
+        cell << "B";
+    }
+
     return board;
 }
 

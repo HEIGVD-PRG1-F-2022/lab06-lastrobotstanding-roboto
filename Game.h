@@ -5,6 +5,7 @@
 #include "helper.h"
 #include "libdio/display.h"
 #include "librobots/RobotState.h"
+#include "librobots/Bonus.h"
 #include "robots/Roboto.h"
 #include <iostream>
 #include <vector>
@@ -12,7 +13,7 @@
 
 class Game {
     std::vector<RobotState> robots;
-    std::vector<Position> boni;
+    std::vector<Bonus> boni;
     unsigned nbRobots;
 
 public:
