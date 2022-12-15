@@ -1,6 +1,7 @@
 #include "Roboto.h"
 #include "librobots/Direction.h"
 #include "librobots/Message.h"
+#include <algorithm>
 #include <iostream>
 #include <random>
 #include <vector>
@@ -24,6 +25,17 @@ string Roboto::action(vector<string> updates) {
     // return Message::actionMove(Direction(1, 1));
     for (string update: updates) {
         Message message(update);
+        if (message.msg == MessageType::UpdateBonus) {
+            vector<Direction> bonusDirections = message.boni;
+            if (!bonusDirections.empty()) {
+
+                //Sort by growing magnitude to have the nearest robot
+                sort(bonusDirections.begin(), bonusDirections.end(), [](Direction first, Direction second) -> bool {
+                    return first.mag() < second.mag();
+                });
+                return Message::actionMove(bonusDirections.at(0));
+            }
+        }
         if (message.msg == MessageType::UpdateBoard) {
             for (Direction direction: message.robots) {
                 if (direction.mag() <= 2) {
