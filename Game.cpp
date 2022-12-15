@@ -16,7 +16,6 @@
 #include <string>
 #include <thread>
 #include <vector>
-#include <windows.h>
 #include <iomanip>
 
 const int BASE_ENERGY = 10;
@@ -118,16 +117,17 @@ void Game::start(vector<RobotPack> robotPacks) {
             }
         }
 
-        //TODO: check if there is a bonus at this position
         for (auto rob: livingRobots) {
-            for (auto it = boni.begin(); it != boni.end(); it++) {
+            for (auto it = boni.begin(); it != boni.end();) {
                 if (rob->getPosition() == it->pos) {
                     if (it->type == BonusType::Energy) {
                         rob->actionEnergy(it->value);
                     } else {
                         rob->actionPower(it->value);
                     }
-                    boni.erase(it);
+                    it = boni.erase(it);
+                } else {
+                    it++;
                 }
             }
         }
