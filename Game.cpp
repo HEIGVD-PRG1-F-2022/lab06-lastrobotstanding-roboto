@@ -132,6 +132,19 @@ void Game::start(vector<RobotPack> robotPacks) {
             }
         }
 
+        // action radar
+//        for (RobotState *state: getLivingRobots()) {
+//            Message message = state->getAction();
+//            if (message.msg == MessageType::ActionRadar) {
+//                state->actionRadar(positions, boniPos);
+//                for (RobotState *otherState: getLivingRobots()) {
+//                    if (otherState != state) {
+//                        //send to other robot update with robot direction
+//                    }
+//                }
+//            }
+//        }
+
         if (!someRobotsAttackedInThisIteration) {
             iterationWithoutAttack++;
         }
@@ -263,8 +276,8 @@ void Game::printStat(RobotState state, unsigned index) {
     } else {
         stat.setColor(Display::Color::GREEN);
         stream << state.getAction().getMessageType()
-               << " (" << setw(2) << state.getAction().robots[0].getdX()
-               << "," << setw(2) << state.getAction().robots[0].getY() << ")" << endl;
+               << " (" << setw(3) << state.getAction().robots[0].getdX()
+               << "," << setw(3) << state.getAction().robots[0].getY() << ")" << endl;
     }
     stat << stream.str();
     stat.print();
