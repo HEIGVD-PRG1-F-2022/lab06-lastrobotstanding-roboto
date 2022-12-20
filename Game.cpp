@@ -44,15 +44,7 @@ void Game::start(vector<RobotPack> robotPacks) {
 
     while (iterationWithoutAttack < MAXIMUM_ITERATION_WITHOUT_ATTACK * nbRobots && getLivingRobots().size() > 1) {
         someRobotsAttackedInThisIteration = false;
-
-        if (iterationCount % (20 / nbRobots) == 0) {
-            BonusType type = (getRandomNumber(0, 1) == 0 ? BonusType::Energy : BonusType::Power);
-            Bonus bonus(size, size, (type == BonusType::Energy ? BONUS_MAX_ENERGY : BONUS_MAX_POWER), type);
-            boni.push_back(bonus);
-            for (RobotState *state: getLivingRobots()) {
-                state->actionBonus(bonus.pos);
-            }
-        }
+        iterationCount++;
 
         //Build a list of all living robots positions
         vector<Position> positions;
@@ -145,14 +137,21 @@ void Game::start(vector<RobotPack> robotPacks) {
         //            }
         //        }
 
+        if (iterationCount % (20 / nbRobots) == 0) {
+            BonusType type = (getRandomNumber(0, 1) == 0 ? BonusType::Energy : BonusType::Power);
+            Bonus bonus(size, size, (type == BonusType::Energy ? BONUS_MAX_ENERGY : BONUS_MAX_POWER), type);
+            boni.push_back(bonus);
+            for (RobotState *state: getLivingRobots()) {
+                state->actionBonus(bonus.pos);
+            }
+        }
+
         if (!someRobotsAttackedInThisIteration) {
             iterationWithoutAttack++;
         }
 
         printBoard(iterationCount);
         std::this_thread::sleep_for(SLEEP_TIME_BETWEEN_LOOP);//little sleep before next reload
-
-        iterationCount++;
     }
 
     //TODO: display the winner
