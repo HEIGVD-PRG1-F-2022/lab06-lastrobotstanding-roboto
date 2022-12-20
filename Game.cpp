@@ -38,7 +38,7 @@ void Game::start(vector<RobotPack> robotPacks) {
     bool someRobotsAttackedInThisIteration;
     const int MAXIMUM_ITERATION_WITHOUT_ATTACK = 100;
     unsigned iterationCount = 0;
-    const std::chrono::milliseconds SLEEP_TIME_BETWEEN_LOOP(50);
+    const std::chrono::milliseconds SLEEP_TIME_BETWEEN_LOOP(100);
     const unsigned BONUS_MAX_ENERGY = 10;
     const unsigned BONUS_MAX_POWER = 3;
 
@@ -60,6 +60,7 @@ void Game::start(vector<RobotPack> robotPacks) {
 
         size_t index = 0;
         for (RobotState *state: getLivingRobots()) {
+            //Send the board update with the own context for each robot, and ask for the action
             state->sendUpdate(Message::updateBoard(positions, boniPos).at(index));
             cout << endl;
             index++;
@@ -117,30 +118,34 @@ void Game::start(vector<RobotPack> robotPacks) {
                     } else {
                         rob->actionPower(it->value);
                     }
-                    it = boni.erase(it);
+                    it = boni.erase(it);//after erase, the pointer is incremented so we must take the new value
                 } else {
-                    it++;
+                    it++;//if no there was no remove, we have to manually increment the iterator
                 }
             }
         }
 
-        // action radar
-        //        for (RobotState *state: getLivingRobots()) {
-        //            Message message = state->getAction();
-        //            if (message.msg == MessageType::ActionRadar) {
-        //                state->actionRadar(positions, boniPos);
-        //                for (RobotState *otherState: getLivingRobots()) {
-        //                    if (otherState != state) {
-        //                        //send to other robot update with robot direction
-        //                    }
-        //                }
-        //            }
-        //        }
+        // Manage radar actions
+        for (RobotState *state: getLivingRobots()) {
+            Message message = state->getAction();
+            if (message.msg == MessageType::ActionRadar) {
+                state->actionRadar(positions, boniPos);
+                //Send a robot update to all other robots (containing the direction of the robot running the radar)
+                for (RobotState *otherRobot: getLivingRobots()) {
+                    if (otherRobot != state) {
+                        otherRobot->actionRadar({state->getPosition()});
+                    }
+                }
+            }
+        }
 
+        //Generate new robots each 20/nbRobots iteration (iterationCount starts at 1 to avoid having a bonus for the first iteration)
         if (iterationCount % (20 / nbRobots) == 0) {
-            BonusType type = (getRandomNumber(0, 1) == 0 ? BonusType::Energy : BonusType::Power);
-            Bonus bonus(size, size, (type == BonusType::Energy ? BONUS_MAX_ENERGY : BONUS_MAX_POWER), type);
+            BonusType type = (getRandomNumber(0, 1) == 0 ? BonusType::Energy : BonusType::Power);           //Choose randomly the type of bonus (energy or power)
+            Bonus bonus(size, size, (type == BonusType::Energy ? BONUS_MAX_ENERGY : BONUS_MAX_POWER), type);//Create the bonus with a random maximum (depending on the bonus type)
             boni.push_back(bonus);
+
+            //Alert all robots about the new bonus
             for (RobotState *state: getLivingRobots()) {
                 state->actionBonus(bonus.pos);
             }
