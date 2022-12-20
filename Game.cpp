@@ -5,18 +5,18 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <iomanip>
 #include <libdio/display.h>
+#include <librobots/Bonus.h>
 #include <librobots/Direction.h>
 #include <librobots/Message.h>
 #include <librobots/Position.h>
-#include <librobots/Bonus.h>
 #include <librobots/Robot.h>
 #include <librobots/RobotState.h>
 #include <random>
 #include <string>
 #include <thread>
 #include <vector>
-#include <iomanip>
 
 const int BASE_ENERGY = 10;
 const int BASE_POWER = 1;
@@ -133,17 +133,17 @@ void Game::start(vector<RobotPack> robotPacks) {
         }
 
         // action radar
-//        for (RobotState *state: getLivingRobots()) {
-//            Message message = state->getAction();
-//            if (message.msg == MessageType::ActionRadar) {
-//                state->actionRadar(positions, boniPos);
-//                for (RobotState *otherState: getLivingRobots()) {
-//                    if (otherState != state) {
-//                        //send to other robot update with robot direction
-//                    }
-//                }
-//            }
-//        }
+        //        for (RobotState *state: getLivingRobots()) {
+        //            Message message = state->getAction();
+        //            if (message.msg == MessageType::ActionRadar) {
+        //                state->actionRadar(positions, boniPos);
+        //                for (RobotState *otherState: getLivingRobots()) {
+        //                    if (otherState != state) {
+        //                        //send to other robot update with robot direction
+        //                    }
+        //                }
+        //            }
+        //        }
 
         if (!someRobotsAttackedInThisIteration) {
             iterationWithoutAttack++;
@@ -255,7 +255,9 @@ void Game::printBoard(unsigned iterationCount) {
 
 void Game::printStats() {
     cout << "id " << setw(14) << left << "Name " << setw(5) << left << "pos"
-         << "Energy " << "Power " << "Move/Cause of death" << endl;
+         << "Energy "
+         << "Power "
+         << "Move/Cause of death" << endl;
     unsigned index = 1;
     for (RobotState &state: robots) {
         printStat(state, index);
