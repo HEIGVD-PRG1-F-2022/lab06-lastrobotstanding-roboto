@@ -51,6 +51,15 @@ struct Damage {
 
 ### Algorithms
 Pseudocode of Roboto's strategy:
+
+Goals:
+- getting a lot of bonus
+- getting bonus or escaping is a priority when
+- avoid collisions
+
+case: when an attack received
+
+case si attack received proche et forte, le robot en face a plus de power que nous, fuite.
 ```
 iteration = 0
 const float nbRobots = size^2 / 10 //estimated number of robots (a bit under the real value)
@@ -60,7 +69,11 @@ IF energy > minEnergyLevel
 		Attack the closest robot
 	ELSE IF bonus in the zone
 		IF bonus is touching us
-			take the bonus
+			IF another robot is touching the bonus
+				Attack the other robot
+			ELSE
+				take the bonus
+
 		ELSE IF robot touching
 			attack the closest robot
 		
