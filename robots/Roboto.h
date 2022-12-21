@@ -24,11 +24,13 @@ struct Damage {
 class Roboto : public Robot {
     size_t width, height;
     unsigned energy, power;
+    unsigned iteration = 0;
+    unsigned minEnergyLevel = 10;
     // std::vector<std::vector<Case>> board;
 
     Message receiveDamage(std::string update);//fonction
-    std::string chooseAction();
-
+    std::string chooseAction(Message message);
+    Direction escapeDirection(std::string board);
 public:
     Roboto() = default;
     virtual void setConfig(size_t w, size_t h, unsigned e, unsigned p);

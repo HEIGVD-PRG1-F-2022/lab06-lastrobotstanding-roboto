@@ -62,7 +62,7 @@ case: when an attack received
 case si attack received proche et forte, le robot en face a plus de power que nous, fuite.
 ```
 iteration = 0
-const float nbRobots = size^2 / 10 //estimated number of robots (a bit under the real value)
+const float nbRobots = (size / 10)^2 //estimated number of robots (a bit under the real value)
 int minEnergyLevel = 10;
 IF energy > minEnergyLevel 
 	IF at least robot in the zone

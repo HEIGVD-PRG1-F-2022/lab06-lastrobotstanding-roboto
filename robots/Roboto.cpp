@@ -42,14 +42,15 @@ string Roboto::action(vector<string> updates) {
                     return Message::actionAttack(direction);
                 }
             }
+            chooseAction(message);
         }
         if (message.msg == MessageType::UpdateDamage) {
             energy -= message.energy;
         }
-        if(message.msg == MessageType::UpdateEnergy){
+        if (message.msg == MessageType::UpdateEnergy) {
             energy += message.energy;
         }
-        if(message.msg == MessageType::UpdatePower){
+        if (message.msg == MessageType::UpdatePower) {
             power += message.power;
         }
     }
@@ -66,28 +67,73 @@ string Roboto::name() const {
 
 // Damage Roboto::receiveDamage(string update) {
 // }
-string Roboto::chooseAction() {
+string Roboto::chooseAction(Message message) {
     //TODO: Implement roboto strategy
 
-    //Si + d'un robot autour -> fuir
+    const unsigned nbRobots = pow((width / 10), 2);
+    vector<Direction> robotsDirections = message.robots;
+    vector<Direction> boniDirections = message.boni;
+    if (energy > minEnergyLevel) { //if a lot of energy
 
-    //Si un robot autour (diagonale) ->
-    //  Si peu energy -> fuir autre direction
-    //  Si bon energy peu power -> ?
-    //  Si bon energy bon power -> s'aligner pour attaquer
+        if (!boniDirections.empty()) { //if bonus in zone
+            for (Direction direction: boniDirections) {
+                if (direction.mag() <= 1) { //if touching bonus
+                    if (/*another robot touching bonus*/) {
+                        //return Message::actionAttack(OTHER_ROBOT_DIRECTION);
+                    } else { //no robot touching bonus
+                        //return Message::actionMove(BONUS_DIRECTION);
+                    }
+                }
+                //ELSE IF robot touching
+                //  attack the closest robot
+            }
+        } else { //no bonus in zone
+            if (!robotsDirections.empty()) { //if robots in zone
+                // find the closest robot
+                sort(robotsDirections.begin(), robotsDirections.end(), [](Direction first, Direction second) -> bool {
+                    return first.mag() < second.mag();
+                });
+                return Message::actionAttack(robotsDirections.at(0)); //attack closest
+            }
+        }
 
-    //Si un robot en face (ligne/colonne) ->
-    //  Si peu energy -> fuir
-    //  Si bon energy peu power -> ?
-    //  Si bon energy et bon power -> attaquer
+    } else { //if not a lot of energy
+        if (!boniDirections.empty()){ //if bonus in zone
+            if(/*no other robot nearer than us*/){
+                //return Message::actionMove(BONUS_DIRECTION);
+            }else{ //if robot nearer than us
+                //return Message::actionAttack(THE_CLOSEST_ROBOT_FROM_BONUS);
+            }
+        }
+        else if(!robotsDirections.empty()){ //else if robots in zone
+            //Move to escapeDirection(board)
+        }
+        else{
+            //return Message::actionMove(XXX);
+        }
+    }
 
-    //Si bonus autour ->
-    //  Si peu energy -> aller vers bonus
-    //  Si bon energy -> ?
+    minEnergyLevel += (iteration % (20 / nbRobots) == 0) ? 1 : 0;
+    iteration++;
 
-    //Radar?
-    //Damage?
-    //Wait?
+    return Message::actionWait();
+}
 
-    return "";
+Direction Roboto::escapeDirection(string board){
+    Direction direction(0, 0);
+//    Map touchingRobotsPerCells
+//
+//
+//    FOR EACH touching cell including self cell around the robot
+//    Calculate number of touching robots
+//    Store number in a map touchingRobotsPerCells at index cell
+//    Calculate number of distant robots (magnitude >= 2)
+//    Store number in a map distantRobotsPerCells at index cell
+//
+//    Sort the touchingRobotsPerCells map by ascending value
+//
+//    IF there is only 1 touchingRobot for on of the cell
+//    Move to this cell
+//    ELSE IF more than 1 touchingRobot for on of the cell
+return direction;
 }
