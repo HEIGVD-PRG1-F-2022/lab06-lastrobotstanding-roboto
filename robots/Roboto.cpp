@@ -77,7 +77,7 @@ string Roboto::chooseAction(Message message) {
 
         if (!boniDirections.empty()) {//if bonus in zone
             for (Direction direction: boniDirections) {
-                if (direction.mag() <= 1) {//if touching bonus
+                if (direction.mag() <= 2) {//if touching bonus
                     if (/*another robot touching bonus*/) {
                         //return Message::actionAttack(OTHER_ROBOT_DIRECTION);
                     } else {//no robot touching bonus
