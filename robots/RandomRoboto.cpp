@@ -17,10 +17,16 @@ void RandomRoboto::setConfig(size_t w, size_t h, unsigned e, unsigned p) {
 }
 
 string RandomRoboto::action(vector<string> updates) {
-    int dX = (rand() % 10 == 0) ? 1 : -1;
-    int dY = (rand() % 10 == 0) ? 1 : 0;
-    Direction randomDirection(dX, dY);
-    return Message::actionMove(randomDirection);
+    int dX, dY;
+    if ((rand() % 10 == 0)) {
+        dX = (rand() % 10 == 0) ? 1 : -1;
+        dY = (rand() % 10 == 0) ? 1 : 0;
+        return Message::actionMove(Direction(dX, dY));
+    } else {
+        dX = -1;
+        dY = 1;
+        return Message::actionMove(Direction(dX, dY));
+    }
 }
 
 string RandomRoboto::name() const {
