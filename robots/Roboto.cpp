@@ -46,6 +46,12 @@ string Roboto::action(vector<string> updates) {
         if (message.msg == MessageType::UpdateDamage) {
             energy -= message.energy;
         }
+        if(message.msg == MessageType::UpdateEnergy){
+            energy += message.energy;
+        }
+        if(message.msg == MessageType::UpdatePower){
+            power += message.power;
+        }
     }
     return Message::actionMove(Direction(rand() % (1 + 1) - 1, rand() % (1 + 1) - 1));
 }
@@ -62,5 +68,26 @@ string Roboto::name() const {
 // }
 string Roboto::chooseAction() {
     //TODO: Implement roboto strategy
+
+    //Si + d'un robot autour -> fuir
+
+    //Si un robot autour (diagonale) ->
+    //  Si peu energy -> fuir autre direction
+    //  Si bon energy peu power -> ?
+    //  Si bon energy bon power -> s'aligner pour attaquer
+
+    //Si un robot en face (ligne/colonne) ->
+    //  Si peu energy -> fuir
+    //  Si bon energy peu power -> ?
+    //  Si bon energy et bon power -> attaquer
+
+    //Si bonus autour ->
+    //  Si peu energy -> aller vers bonus
+    //  Si bon energy -> ?
+
+    //Radar?
+    //Damage?
+    //Wait?
+
     return "";
 }
