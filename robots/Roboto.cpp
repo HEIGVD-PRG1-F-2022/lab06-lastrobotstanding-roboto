@@ -17,26 +17,24 @@ void Roboto::setConfig(size_t w, size_t h, unsigned e, unsigned p) {
     // board = vector<vector<Case>>(w, vector<string>(h, EMPTY));
 }
 
-UpdatesPack Roboto::receiveUpdates(vector<string> updates) {
-    for (string update: updates) {
-        Message message(update);
-        if (message.msg == MessageType::UpdateBoard) {
-            Message boardUpdate = message;
-        }
-    }
-    UpdatesPack pack = {boardUpdate: boardUpdate};
+UpdatesPack Roboto::receiveUpdates(const vector<string> &updates) {
+    Message boardUpdate = Message(updates.at(0));//the boardUpdate is always the first update (see code of RobotState::sendUpdate())
+
+    UpdatesPack pack = {.boardUpdate = boardUpdate};//create the pack with the boardUpdate (the only attribute that don't have a default constructor)
 
     for (string update: updates) {
         Message message(update);
 
+        //Extract UpdateBonus and UpdateDamage message for the pack (and apply damage)
         if (message.msg == MessageType::UpdateBonus) {
             pack.bonusUpdates.push_back(message);
         }
-
         if (message.msg == MessageType::UpdateDamage) {
             energy -= message.energy;
             pack.damageUpdates.push_back(message);
         }
+
+        //Apply energy and power gains
         if (message.msg == MessageType::UpdateEnergy) {
             energy += message.energy;
         }

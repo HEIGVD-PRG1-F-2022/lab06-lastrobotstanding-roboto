@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+//A pack containing the extracted updates (as Message) useful to the strategy, separated by types
 struct UpdatesPack {
     Message boardUpdate;
     std::vector<Message> bonusUpdates;
@@ -23,8 +24,8 @@ class Roboto : public Robot {
     unsigned minEnergyLevel = 10;
 
     std::string chooseAction(UpdatesPack pack);
+    UpdatesPack receiveUpdates(const std::vector<std::string> &updates);
     Direction escapeDirection(std::string board);
-    UpdatesPack receiveUpdates(std::vector<std::string> updates);
 
 public:
     Roboto() = default;
