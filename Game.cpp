@@ -141,7 +141,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
             }
         }
 
-        //Generate new robots each 20/nbRobots iteration (iterationCount starts at 1 to avoid having a bonus for the first iteration)
+        //Generate new bonus each 20/nbRobots iteration (iterationCount starts at 1 to avoid having a bonus for the first iteration)
         if (iterationCount % (20 / nbRobots) == 0) {
             BonusType type = (getRandomNumber(0, 1) == 0 ? BonusType::Energy : BonusType::Power);           //Choose randomly the type of bonus (energy or power)
             Bonus bonus(size, size, (type == BonusType::Energy ? BONUS_MAX_ENERGY : BONUS_MAX_POWER), type);//Create the bonus with a random maximum (depending on the bonus type)
@@ -169,9 +169,11 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
         printBoard(iterationCount);
     }
     vector<RobotState *> finalLivingRobots = getLivingRobots();
+    string winner;
     if (finalLivingRobots.size() == 1) {
+        winner = finalLivingRobots.at(0)->getName();
         d.setColor(Display::Color::ORANGE);
-        d << "The winner is " << finalLivingRobots.at(0)->getName() << "\n";
+        d << "The winner is " << winner << "\n";
     } else {
         d.setColor(Display::Color::BLUE);
         d << "The game stopped because " << (100 * nbRobots) << " turns have happened without any attack...\n";
@@ -189,7 +191,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
 void Game::generateRobots(vector<RobotPack> robotPacks) {
     for (const RobotPack &pack: robotPacks) {
         int randomX, randomY;
-        for (int i = 0; i <= pack.number; i++) {
+        for (int i = 1; i <= pack.number; i++) {
             randomX = getRandomNumber(0, (int) size - 1);
             randomY = getRandomNumber(0, (int) size - 1);
             Position pos(randomX, randomY, size, size);
@@ -219,16 +221,29 @@ vector<RobotState *> Game::getLivingRobots() {
 }
 
 vector<vector<Display::DString>> Game::buildDynamicBoard() {
-    vector<vector<Display::DString>> board = vector<vector<Display::DString>>(size, vector<Display::DString>(size,
-                                                                                                             Display::DString()));
+    vector<vector<Display::DString>> board = vector<vector<Display::DString>>(size, vector<Display::DString>(size, Display::DString()));
 
     //For each RobotState we add them in the board with their number
     int index = 1;
-    //TODO: use livingRobots of the last turn
-    for (RobotState state: robots) {
+    for (const RobotState &state: robots) {
         if (!state.isDead()) {
             Display::DString &cell = board.at(state.getPosition().getX()).at(state.getPosition().getY());
-            cell.setColor(Display::Color::GREEN);
+            Display::Color cellColor;
+            switch (state.getAction().msg) {
+                case MessageType::ActionAttack:
+                    cellColor = Display::Color::BLUE;
+                    break;
+                case MessageType::ActionMove:
+                    cellColor = Display::Color::GREEN;
+                    break;
+                case MessageType::ActionRadar:
+                    cellColor = Display::Color::RED;
+                    break;
+                case MessageType::ActionWait:
+                default:
+                    cellColor = Display::Color::YELLOW;
+            }
+            cell.setColor(cellColor);
             cell << to_string(index);
         }
         index++;
