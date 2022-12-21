@@ -31,6 +31,7 @@ class Roboto : public Robot {
     Message receiveDamage(std::string update);//fonction
     std::string chooseAction(Message message);
     Direction escapeDirection(std::string board);
+
 public:
     Roboto() = default;
     virtual void setConfig(size_t w, size_t h, unsigned e, unsigned p);

@@ -73,42 +73,40 @@ string Roboto::chooseAction(Message message) {
     const unsigned nbRobots = pow((width / 10), 2);
     vector<Direction> robotsDirections = message.robots;
     vector<Direction> boniDirections = message.boni;
-    if (energy > minEnergyLevel) { //if a lot of energy
+    if (energy > minEnergyLevel) {//if a lot of energy
 
-        if (!boniDirections.empty()) { //if bonus in zone
+        if (!boniDirections.empty()) {//if bonus in zone
             for (Direction direction: boniDirections) {
-                if (direction.mag() <= 1) { //if touching bonus
+                if (direction.mag() <= 1) {//if touching bonus
                     if (/*another robot touching bonus*/) {
                         //return Message::actionAttack(OTHER_ROBOT_DIRECTION);
-                    } else { //no robot touching bonus
+                    } else {//no robot touching bonus
                         //return Message::actionMove(BONUS_DIRECTION);
                     }
                 }
                 //ELSE IF robot touching
                 //  attack the closest robot
             }
-        } else { //no bonus in zone
-            if (!robotsDirections.empty()) { //if robots in zone
+        } else {                            //no bonus in zone
+            if (!robotsDirections.empty()) {//if robots in zone
                 // find the closest robot
                 sort(robotsDirections.begin(), robotsDirections.end(), [](Direction first, Direction second) -> bool {
                     return first.mag() < second.mag();
                 });
-                return Message::actionAttack(robotsDirections.at(0)); //attack closest
+                return Message::actionAttack(robotsDirections.at(0));//attack closest
             }
         }
 
-    } else { //if not a lot of energy
-        if (!boniDirections.empty()){ //if bonus in zone
-            if(/*no other robot nearer than us*/){
+    } else {                          //if not a lot of energy
+        if (!boniDirections.empty()) {//if bonus in zone
+            if (/*no other robot nearer than us*/) {
                 //return Message::actionMove(BONUS_DIRECTION);
-            }else{ //if robot nearer than us
+            } else {//if robot nearer than us
                 //return Message::actionAttack(THE_CLOSEST_ROBOT_FROM_BONUS);
             }
-        }
-        else if(!robotsDirections.empty()){ //else if robots in zone
+        } else if (!robotsDirections.empty()) {//else if robots in zone
             //Move to escapeDirection(board)
-        }
-        else{
+        } else {
             //return Message::actionMove(XXX);
         }
     }
@@ -119,21 +117,21 @@ string Roboto::chooseAction(Message message) {
     return Message::actionWait();
 }
 
-Direction Roboto::escapeDirection(string board){
+Direction Roboto::escapeDirection(string board) {
     Direction direction(0, 0);
-//    Map touchingRobotsPerCells
-//
-//
-//    FOR EACH touching cell including self cell around the robot
-//    Calculate number of touching robots
-//    Store number in a map touchingRobotsPerCells at index cell
-//    Calculate number of distant robots (magnitude >= 2)
-//    Store number in a map distantRobotsPerCells at index cell
-//
-//    Sort the touchingRobotsPerCells map by ascending value
-//
-//    IF there is only 1 touchingRobot for on of the cell
-//    Move to this cell
-//    ELSE IF more than 1 touchingRobot for on of the cell
-return direction;
+    //    Map touchingRobotsPerCells
+    //
+    //
+    //    FOR EACH touching cell including self cell around the robot
+    //    Calculate number of touching robots
+    //    Store number in a map touchingRobotsPerCells at index cell
+    //    Calculate number of distant robots (magnitude >= 2)
+    //    Store number in a map distantRobotsPerCells at index cell
+    //
+    //    Sort the touchingRobotsPerCells map by ascending value
+    //
+    //    IF there is only 1 touchingRobot for on of the cell
+    //    Move to this cell
+    //    ELSE IF more than 1 touchingRobot for on of the cell
+    return direction;
 }
