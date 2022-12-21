@@ -4,10 +4,11 @@
 
 #include "helper.h"
 #include "libdio/display.h"
-#include "librobots/RobotState.h"
 #include "librobots/Bonus.h"
+#include "librobots/RobotState.h"
 #include "robots/Roboto.h"
 #include <iostream>
+#include <string>
 #include <vector>
 
 
@@ -20,7 +21,7 @@ public:
     // recoit les actions des robots, les applique, écrit les string update et les envoie aux robots
     size_t size;                     //pas constant sinon le compilateur ne me laisse pas l'initialiser séparément
     explicit Game(unsigned nbRobots);//constructeur
-    void start(std::vector<RobotPack> robotPacks);
+    std::string start(std::vector<RobotPack> robotPacks, bool displayMode = true);
     void generateRobots(std::vector<RobotPack> robotPacks);//fonction
     std::vector<RobotState *> getLivingRobots();
     void printBoard(unsigned iterationCount);

@@ -27,10 +27,12 @@ Game::Game(unsigned nbRobots) : nbRobots(nbRobots) {
     size = (size_t) sqrt(nbRobots) * 10;
 }
 
-void Game::start(vector<RobotPack> robotPacks) {
+string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
     Display::DString d(Display::Color::GREEN);
     d << "Welcome in LastRobotStanding, the fight has started...\n";
-    d.print();
+    if (displayMode) {
+        d.print();
+    }
     generateRobots(robotPacks);
 
     //game loop
@@ -155,12 +157,17 @@ void Game::start(vector<RobotPack> robotPacks) {
             iterationWithoutAttack++;
         }
 
-        printBoard(iterationCount);
-        std::this_thread::sleep_for(SLEEP_TIME_BETWEEN_LOOP);//little sleep before next reload
+        //Display board and wait only if the display mode is enabled
+        if (displayMode) {
+            printBoard(iterationCount);
+            std::this_thread::sleep_for(SLEEP_TIME_BETWEEN_LOOP);//little sleep before next reload
+        }
     }
 
-    //TODO: display the winner
-    printBoard(iterationCount);
+    //Display the winner or the reason of game stop and return the winner name
+    if (displayMode) {
+        printBoard(iterationCount);
+    }
     vector<RobotState *> finalLivingRobots = getLivingRobots();
     if (finalLivingRobots.size() == 1) {
         d.setColor(Display::Color::ORANGE);
@@ -168,17 +175,15 @@ void Game::start(vector<RobotPack> robotPacks) {
     } else {
         d.setColor(Display::Color::BLUE);
         d << "The game stopped because " << (100 * nbRobots) << " turns have happened without any attack...\n";
-        unsigned index = 0;
-        for (RobotState *finalRobot: finalLivingRobots) {
-            d << index << ". " << finalRobot->getName();
-            printStat(*finalRobot, index);
-            index++;
+        if (displayMode) {
+            printStats();
         }
     }
-
-    d.print();
-
-    system("pause");
+    if (displayMode) {
+        d.print();
+    }
+    // system("pause");
+    return winner;
 }
 
 void Game::generateRobots(vector<RobotPack> robotPacks) {
