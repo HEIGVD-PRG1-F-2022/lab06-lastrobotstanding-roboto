@@ -64,7 +64,6 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
         for (RobotState *state: getLivingRobots()) {
             //Send the board update with the own context for each robot, and ask for the action
             state->sendUpdate(Message::updateBoard(positions, boniPos).at(index));
-            cout << endl;
             index++;
         }
 
