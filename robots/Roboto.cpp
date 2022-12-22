@@ -162,7 +162,7 @@ Direction Roboto::escapeDirection(vector<Direction> robotsDirections) {
 
     sort(touchingRobotsPerCells.begin(), touchingRobotsPerCells.end());
 
-    int minIndex = -1;
+    int minIndex = 0;
     int minFound = touchingRobotsPerCells.at(0);
     int index = 0;
     for (auto count: touchingRobotsPerCells) {
@@ -171,7 +171,7 @@ Direction Roboto::escapeDirection(vector<Direction> robotsDirections) {
         }
         index++;
     }
-    return cellDirections.at(index);
+    return cellDirections.at(minIndex);
 
     //    FOR EACH touching cell including self cell around the robot
     //    Calculate number of touching robots
