@@ -76,7 +76,7 @@ string Roboto::chooseAction(UpdatesPack pack) {
                 if (direction.mag() <= 2) {//if touching bonus
                     for (Direction directionRobot: robotsDirections) {
                         //TODO: c'est +?
-                        if ((direction + directionRobot).mag() <= 2) {
+                        if ((Position(direction.getdX(), direction.getdY()).directionTo(Position(directionRobot.getdX(), direction.getdY()))).mag() <= 2) {
                             return Message::actionAttack(directionRobot);
                         }
                     }
@@ -115,7 +115,8 @@ string Roboto::chooseAction(UpdatesPack pack) {
                 return Message::actionMove(direction);
             }
         } else if (!robotsDirections.empty()) {//else if robots in zone
-            //Move to escapeDirection(board)
+                                               //Move to escapeDirection(board)
+            return Message::actionMove(escapeDirection(robotsDirections));
         } else {
             Direction directionDiag(-1, -1);
             return Message::actionMove(directionDiag);
@@ -128,7 +129,7 @@ string Roboto::chooseAction(UpdatesPack pack) {
     return Message::actionWait();
 }
 
-Direction Roboto::escapeDirection(string board, vector<Direction> robotsDirections) {
+Direction Roboto::escapeDirection(vector<Direction> robotsDirections) {
     Direction direction(0, 0);
 
     //    Map touchingRobotsPerCells
@@ -140,8 +141,8 @@ Direction Roboto::escapeDirection(string board, vector<Direction> robotsDirectio
 
     int numberOfTouchingRobotsForThisCell = 0;
     int numberOfDistantRobotsForThisCell = 0;
-    for (int i = -1; i = 1; i++) {
-        for (int j = -1; j = 1; j++) {
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
             cellDirections.push_back(Direction(i, j));
             numberOfTouchingRobotsForThisCell = 0;
             for (auto rDirection: robotsDirections) {
@@ -183,5 +184,5 @@ Direction Roboto::escapeDirection(string board, vector<Direction> robotsDirectio
     //    IF there is only 1 touchingRobot for on of the cell
     //    Move to this cell
     //    ELSE IF more than 1 touchingRobot for on of the cell
-    return direction;
+    // return direction;
 }
