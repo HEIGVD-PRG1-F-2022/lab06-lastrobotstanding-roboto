@@ -277,12 +277,20 @@ void Game::printBoard(unsigned iterationCount) {
 }
 
 void Game::printStats() {
-    cout << "id " << setw(14) << left << "Name " << setw(5) << left << "pos"
-         << "Energy "
-         << "Power "
-         << "Move/Cause of death" << endl;
+    ostringstream header;
+
+    header << "ID "
+           << setw(13) << left << "Name"
+           << setw(9) << left << "Position"
+           << setw(7) << left << "Energy"
+           << setw(6) << left << "Power"
+           << "Action/Cause of death" << endl;
+    Display::DString headerPrinter(Display::Color::ORANGE);
+    headerPrinter << header.str();
+    headerPrinter.print();
+
     unsigned index = 1;
-    for (RobotState &state: robots) {
+    for (const RobotState &state: robots) {
         printStat(state, index);
         index++;
     };
@@ -291,18 +299,28 @@ void Game::printStats() {
 void Game::printStat(RobotState state, unsigned index) {
     Display::DString stat;
     ostringstream stream;
-    stream << setw(2) << index << " " << setw(12) << left << state.getName() << " "
-           << state.getPosition() << " "
-           << setw(6) << left << state.getEnergy() << " "
-           << setw(5) << left << state.getPower() << " ";
+
+    stream << setw(2) << index << " " << setw(13) << left << state.getName()
+           << "(" << right << setw(2) << state.getPosition().getX() << ","
+           << setw(3) << right << state.getPosition().getY() << ") "
+           << setw(6) << right << state.getEnergy() << " "
+           << setw(5) << right << state.getPower() << " ";
+
     if (state.isDead()) {
         stat.setColor(Display::Color::RED);
         stream << state.getDeathCause() << endl;
     } else {
         stat.setColor(Display::Color::GREEN);
+        Message action = state.getAction();
+        ostringstream position;
+
+        if (action.msg == MessageType::ActionAttack || action.msg == MessageType::ActionMove) {
+            // position << " (" << setw(3) << action.robots.at(0).getdX()
+            //  << "," << setw(3) << action.robots.at(0).getY() << ")";
+            position << " " << action.robots.at(0);
+        }
         stream << state.getAction().getMessageType()
-               << " (" << setw(3) << state.getAction().robots[0].getdX()
-               << "," << setw(3) << state.getAction().robots[0].getY() << ")" << endl;
+               << position.str() << endl;
     }
     stat << stream.str();
     stat.print();
