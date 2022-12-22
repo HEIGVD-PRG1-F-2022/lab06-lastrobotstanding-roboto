@@ -3,9 +3,9 @@
 #include "librobots/Message.h"
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include <random>
 #include <vector>
-#include <map>
 
 using namespace std;
 
@@ -64,6 +64,14 @@ string Roboto::chooseAction(UpdatesPack pack) {
     if (energy > minEnergyLevel) {//if a lot of energy
 
         if (!boniDirections.empty()) {//if bonus in zone
+
+            //Are we touching another robot ?
+            bool touchingAnotherRobot = false;
+            for (Direction rDirection: robotsDirections) {
+                if (rDirection.mag() <= 2) {
+                    touchingAnotherRobot = true;
+                }
+            }
             for (Direction direction: boniDirections) {
                 if (direction.mag() <= 2) {//if touching bonus
                     for (Direction directionRobot: robotsDirections) {
@@ -72,9 +80,10 @@ string Roboto::chooseAction(UpdatesPack pack) {
                             return Message::actionAttack(directionRobot);
                         }
                     }
+                    //Else take the bonus
                     return Message::actionMove(direction);
                     //TODO: touching robot
-                } else if () { //if touching robot
+                } else if (touchingAnotherRobot) {//if touching robot
                     sort(robotsDirections.begin(), robotsDirections.end(),
                          [](Direction first, Direction second) -> bool {
                              return first.mag() < second.mag();
@@ -119,7 +128,7 @@ string Roboto::chooseAction(UpdatesPack pack) {
     return Message::actionWait();
 }
 
-Direction Roboto::escapeDirection(string board) {
+Direction Roboto::escapeDirection(string board, vector<Direction> robotsDirections) {
     Direction direction(0, 0);
 
     //    Map touchingRobotsPerCells
@@ -129,7 +138,10 @@ Direction Roboto::escapeDirection(string board) {
 
     for (int i = -1; i = 1; i++) {
         for (int j = -1; j = 1; j++) {
-
+            for (auto rDirection: robotsDirections) {
+                Position robotPosition = Position(0, 0) + rDirection;
+                // Position = Position(0, 0) + ;
+            }
         }
     }
 
