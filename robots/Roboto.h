@@ -25,7 +25,7 @@ class Roboto : public Robot {
     unsigned minEnergyLevel = 10;
 
     std::string chooseAction(UpdatesPack pack);
-    Direction escapeDirection(std::string board, std::vector<Direction> robotsDirections);
+    Direction escapeDirection(std::vector<Direction> robotsDirections);
 
 public:
     Roboto() = default;
