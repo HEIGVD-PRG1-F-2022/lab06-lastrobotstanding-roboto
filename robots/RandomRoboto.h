@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-class RandomRoboto : public Robot {
+class RandomRoboto {
     size_t width, height;
     unsigned energy, power;
     // std::vector<std::vector<Case>> board;

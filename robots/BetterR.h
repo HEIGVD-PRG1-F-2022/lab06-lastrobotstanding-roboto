@@ -11,7 +11,7 @@
 #include <vector>
 
 
-class BetterR : public Roboto {
+class BetterR {
     std::string chooseAction(UpdatesPack pack);
 
 public:
