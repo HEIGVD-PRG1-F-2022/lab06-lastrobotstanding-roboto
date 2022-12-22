@@ -24,12 +24,12 @@ class Roboto : public Robot {
     unsigned minEnergyLevel = 10;
 
     std::string chooseAction(UpdatesPack pack);
-    UpdatesPack receiveUpdates(const std::vector<std::string> &updates);
     Direction escapeDirection(std::string board);
 
 public:
     Roboto() = default;
     virtual void setConfig(size_t w, size_t h, unsigned e, unsigned p);
+    UpdatesPack receiveUpdates(const std::vector<std::string> &updates);
     std::string action(std::vector<std::string> updates);//fonction: recoit les updates(string) de game, return l'action qu'il fait en conséquence
     std::string name() const;
 };

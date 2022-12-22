@@ -5,6 +5,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -72,6 +73,7 @@ string Roboto::chooseAction(UpdatesPack pack) {
                         }
                     }
                     return Message::actionMove(direction);
+                    //TODO: touching robot
                 } else if () { //if touching robot
                     sort(robotsDirections.begin(), robotsDirections.end(),
                          [](Direction first, Direction second) -> bool {
@@ -120,12 +122,17 @@ string Roboto::chooseAction(UpdatesPack pack) {
 Direction Roboto::escapeDirection(string board) {
     Direction direction(0, 0);
 
-
-    
-
     //    Map touchingRobotsPerCells
-    //
-    //
+    //TODO: remplacer par FOR EACH
+
+    map<int, int> touchingRobotsPerCells;
+
+    for (int i = -1; i = 1; i++) {
+        for (int j = -1; j = 1; j++) {
+
+        }
+    }
+
     //    FOR EACH touching cell including self cell around the robot
     //    Calculate number of touching robots
     //    Store number in a map touchingRobotsPerCells at index cell
