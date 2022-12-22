@@ -14,6 +14,7 @@
 #include <librobots/Robot.h>
 #include <librobots/RobotState.h>
 #include <random>
+#include <sstream>
 #include <string>
 #include <thread>
 #include <vector>
@@ -43,40 +44,46 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
     const std::chrono::milliseconds SLEEP_TIME_BETWEEN_LOOP(100);
     const unsigned BONUS_MAX_ENERGY = 10;
     const unsigned BONUS_MAX_POWER = 3;
+    vector<Position> positions;//list of positions of all living robots
+    vector<Position> boniPos;  //list of all positions of bonus
+    size_t index = 0;
+    vector<RobotState *> livingRobots;
 
     while (iterationWithoutAttack < MAXIMUM_ITERATION_WITHOUT_ATTACK * nbRobots && getLivingRobots().size() > 1) {
         someRobotsAttackedInThisIteration = false;
         iterationCount++;
 
+        livingRobots = getLivingRobots();//load the list the first time
+
         //Build a list of all living robots positions
-        vector<Position> positions;
-        for (const RobotState *state: getLivingRobots()) {
+        positions.clear();
+        for (const RobotState *state: livingRobots) {
             positions.push_back(state->getPosition());
         }
-
-        vector<Position> boniPos;
+        //Build a list of all bonus positions
+        boniPos.clear();
         for (auto b: boni) {
             boniPos.push_back(b.pos);
         }
         //Call action() on all robots with the board update (other updates are already present in the RobotState object)
-
-        size_t index = 0;
-        for (RobotState *state: getLivingRobots()) {
+        index = 0;
+        vector<string> boardsAsString = Message::updateBoard(positions, boniPos);
+        for (RobotState *state: livingRobots) {
             //Send the board update with the own context for each robot, and ask for the action
-            state->sendUpdate(Message::updateBoard(positions, boniPos).at(index));
+            state->sendUpdate(boardsAsString.at(index));
             index++;
         }
 
         //Get and apply attacks
-        for (const RobotState *state: getLivingRobots()) {
+        for (const RobotState *state: livingRobots) {
             Message message = state->getAction();
 
-            if (message.msg == MessageType::ActionAttack) {
+            if (!state->isDead() && message.msg == MessageType::ActionAttack) {
                 Direction attackedRobotDirection = message.robots.at(0);
                 Position attackedRobotPosition = state->getPosition() + attackedRobotDirection;
 
                 //Look for a robot on the position attackedRobotPosition (if there is no robot, nothing will happen)
-                for (RobotState *otherRobot: getLivingRobots()) {
+                for (RobotState *otherRobot: livingRobots) {
                     if (otherRobot->getPosition() == attackedRobotPosition) {
                         someRobotsAttackedInThisIteration = true;
                         otherRobot->actionAttack(*state, attackedRobotPosition);
@@ -86,8 +93,10 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
             }
         }
 
+        livingRobots = getLivingRobots();//reload the list after attacks
+
         //Get and apply moves
-        for (RobotState *state: getLivingRobots()) {
+        for (RobotState *state: livingRobots) {
             Message message = state->getAction();
 
             if (message.msg == MessageType::ActionMove) {
@@ -96,7 +105,6 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
         }
 
         //After moves, check collisions (2 robots on the same case) and apply rules of collision
-        vector<RobotState *> livingRobots = getLivingRobots();
         int count = 0;
         for (size_t i = 0; i < livingRobots.size(); i++) {
             RobotState *oneRobot = livingRobots.at(i);//TODO: should we declare the variable before ?
@@ -111,13 +119,16 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
             }
         }
 
-        for (auto rob: livingRobots) {
+        livingRobots = getLivingRobots();//reload the list after collisions
+
+        //Manage robots on bonus cells (apply bonus and remove it)
+        for (auto robot: livingRobots) {
             for (auto it = boni.begin(); it != boni.end();) {
-                if (rob->getPosition() == it->pos) {
+                if (robot->getPosition() == it->pos) {
                     if (it->type == BonusType::Energy) {
-                        rob->actionEnergy(it->value);
+                        robot->actionEnergy(it->value);
                     } else {
-                        rob->actionPower(it->value);
+                        robot->actionPower(it->value);
                     }
                     it = boni.erase(it);//after erase, the pointer is incremented so we must take the new value
                 } else {
@@ -127,12 +138,12 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
         }
 
         // Manage radar actions
-        for (RobotState *state: getLivingRobots()) {
+        for (RobotState *state: livingRobots) {
             Message message = state->getAction();
             if (message.msg == MessageType::ActionRadar) {
                 state->actionRadar(positions, boniPos);
                 //Send a robot update to all other robots (containing the direction of the robot running the radar)
-                for (RobotState *otherRobot: getLivingRobots()) {
+                for (RobotState *otherRobot: livingRobots) {
                     if (otherRobot != state) {
                         otherRobot->actionRadar({state->getPosition()});
                     }
@@ -147,7 +158,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
             boni.push_back(bonus);
 
             //Alert all robots about the new bonus
-            for (RobotState *state: getLivingRobots()) {
+            for (RobotState *state: livingRobots) {
                 state->actionBonus(bonus.pos);
             }
         }
