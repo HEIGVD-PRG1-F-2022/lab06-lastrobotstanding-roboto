@@ -134,43 +134,16 @@ Direction Roboto::escapeDirection(string board, vector<Direction> robotsDirectio
     //    Map touchingRobotsPerCells
     //TODO: remplacer par FOR EACH
 
-    vector<int> touchingRobotsPerCells;
-    vector<int> distantRobotsPerCells;
-    vector<Direction> cellDirections;
+    map<int, int> touchingRobotsPerCells;
 
-    int numberOfTouchingRobotsForThisCell = 0;
-    int numberOfDistantRobotsForThisCell = 0;
     for (int i = -1; i = 1; i++) {
         for (int j = -1; j = 1; j++) {
-            cellDirections.push_back(Direction(i, j));
-            numberOfTouchingRobotsForThisCell = 0;
             for (auto rDirection: robotsDirections) {
                 Position robotPosition = Position(0, 0) + rDirection;
-                double distance = robotPosition.directionTo(Position(i, j)).mag();
-                if (distance < 2) {
-                    numberOfTouchingRobotsForThisCell++;
-                }
-                if (distance <= 3 && distance >= 2) {
-                    numberOfDistantRobotsForThisCell++;
-                }
+                // Position = Position(0, 0) + ;
             }
-            touchingRobotsPerCells.push_back(numberOfTouchingRobotsForThisCell);
-            distantRobotsPerCells.push_back(numberOfDistantRobotsForThisCell);
         }
     }
-
-    sort(touchingRobotsPerCells.begin(), touchingRobotsPerCells.end());
-
-    int minIndex = -1;
-    int minFound = touchingRobotsPerCells.at(0);
-    int index = 0;
-    for (auto count: touchingRobotsPerCells) {
-        if (count < minFound) {
-            minIndex = index;
-        }
-        index++;
-    }
-    return cellDirections.at(index);
 
     //    FOR EACH touching cell including self cell around the robot
     //    Calculate number of touching robots
