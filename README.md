@@ -50,7 +50,6 @@ struct Damage {
 ```
 
 ### Algorithms
-Pseudocode of Roboto's strategy:
 
 Goals:
 - getting a lot of bonus
@@ -60,6 +59,10 @@ Goals:
 case: when an attack received
 
 case si attack received proche et forte, le robot en face a plus de power que nous, fuite.
+TODO remove this part.
+
+
+**Pseudocode of Roboto's strategy:**
 ```
 FUNCTION chooseAction()
 	iteration = 0
@@ -121,3 +124,26 @@ FUNCTION escapeDirection(board)
 
 ```
 
+**Pseudocode of BetterR's strategy:**
+Strategy:
+- look at distant bonus
+- use radar
+- escape most of the time
+- attack when power > 5 and energy > 20
+
+```
+const float nbRobots = (size / 10)^2 //estimated number of robots (a bit under the real value)
+
+IF power > 5 and energy > 20
+	IF there is some damage received
+		IF the power of the attacker robot is higher than us
+			escapeDirection(board)
+		ELSE
+				attack this attacker robot 
+		ELSE 
+			IF radar received
+ELSE
+	IF there is some damage received
+		escapeDirection(board)
+		
+```
