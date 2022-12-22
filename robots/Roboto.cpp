@@ -118,7 +118,7 @@ string Roboto::chooseAction(UpdatesPack pack) {
         if (!boniDirections.empty()) {//if bonus in zone
             for (Direction direction: boniDirections) {
                 for (Direction directionRobot: robotsDirections) {
-                    if (direction.mag() >= (direction + directionRobot).mag()) {
+                    if (direction.mag() >= (Position(direction.getdX(), direction.getdY()).directionTo(Position(directionRobot.getdX(), directionRobot.getdY()))).mag()) {
                         //TODO: celui-là?
                         return Message::actionAttack(directionRobot);
                     }
