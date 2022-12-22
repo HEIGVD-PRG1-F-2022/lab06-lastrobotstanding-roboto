@@ -18,7 +18,8 @@ void Roboto::setConfig(size_t w, size_t h, unsigned e, unsigned p) {
 }
 
 UpdatesPack Roboto::receiveUpdates(const vector<string> &updates) {
-    Message boardUpdate = Message(updates.at(0));//the boardUpdate is always the first update (see code of RobotState::sendUpdate())
+    Message boardUpdate = Message(
+            updates.at(0));//the boardUpdate is always the first update (see code of RobotState::sendUpdate())
 
     UpdatesPack pack = {.boardUpdate = boardUpdate};//create the pack with the boardUpdate (the only attribute that don't have a default constructor)
 
@@ -64,14 +65,20 @@ string Roboto::chooseAction(UpdatesPack pack) {
         if (!boniDirections.empty()) {//if bonus in zone
             for (Direction direction: boniDirections) {
                 if (direction.mag() <= 2) {//if touching bonus
-                    // if (/*another robot touching bonus*/) {
-                    //     //return Message::actionAttack(OTHER_ROBOT_DIRECTION);
-                    // } else {//no robot touching bonus
-                    //     //return Message::actionMove(BONUS_DIRECTION);
-                    // }
+                    for (Direction directionRobot: robotsDirections) {
+                        //TODO: c'est +?
+                        if ((direction + directionRobot).mag() <= 2) {
+                            return Message::actionAttack(directionRobot);
+                        }
+                    }
+                    return Message::actionMove(direction);
+                } else if () { //if touching robot
+                    sort(robotsDirections.begin(), robotsDirections.end(),
+                         [](Direction first, Direction second) -> bool {
+                             return first.mag() < second.mag();
+                         });
+                    return Message::actionAttack(robotsDirections.at(0));//attack closest
                 }
-                //ELSE IF robot touching
-                //  attack the closest robot
             }
         } else {                            //no bonus in zone
             if (!robotsDirections.empty()) {//if robots in zone
@@ -82,18 +89,25 @@ string Roboto::chooseAction(UpdatesPack pack) {
                 return Message::actionAttack(robotsDirections.at(0));//attack closest
             }
         }
+        Direction directionDiag(-1, -1);
+        return Message::actionMove(directionDiag);
 
     } else {                          //if not a lot of energy
         if (!boniDirections.empty()) {//if bonus in zone
-            // if (/*no other robot nearer than us*/) {
-            //     //return Message::actionMove(BONUS_DIRECTION);
-            // } else {//if robot nearer than us
-            //     //return Message::actionAttack(THE_CLOSEST_ROBOT_FROM_BONUS);
-            // }
+            for (Direction direction: boniDirections) {
+                for (Direction directionRobot: robotsDirections) {
+                    if (direction.mag() >= (direction + directionRobot).mag()) {
+                        //TODO: celui-là?
+                        return Message::actionAttack(directionRobot);
+                    }
+                }
+                return Message::actionMove(direction);
+            }
         } else if (!robotsDirections.empty()) {//else if robots in zone
             //Move to escapeDirection(board)
         } else {
-            //return Message::actionMove(XXX);
+            Direction directionDiag(-1, -1);
+            return Message::actionMove(directionDiag);
         }
     }
 
@@ -105,6 +119,10 @@ string Roboto::chooseAction(UpdatesPack pack) {
 
 Direction Roboto::escapeDirection(string board) {
     Direction direction(0, 0);
+
+
+    
+
     //    Map touchingRobotsPerCells
     //
     //
