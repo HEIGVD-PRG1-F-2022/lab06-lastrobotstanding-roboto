@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "helper.h"
+#include "robots/BetterR.h"
 #include "robots/RandomRoboto.h"
 #include "robots/Roboto.h"
 #include <algorithm>
@@ -194,7 +195,6 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
     if (displayMode) {
         d.print();
     }
-    // system("pause");
     return winner;
 }
 
@@ -212,6 +212,10 @@ void Game::generateRobots(vector<RobotPack> robotPacks) {
                 robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
             } else if (pack.className == "Roboto") {
                 auto *robot = new Roboto();
+                robot->setConfig(size, size, BASE_ENERGY, BASE_POWER);
+                robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
+            } else if (pack.className == "BetterR") {
+                auto *robot = new BetterR();
                 robot->setConfig(size, size, BASE_ENERGY, BASE_POWER);
                 robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
             }
@@ -280,7 +284,7 @@ void Game::printBoard(unsigned iterationCount) {
     Display::DString d(Display::Color::GREEN);
     d << "LastRobotStanding - Game in progress...\n";
     d.setColor(Display::Color::WHITE);
-    d << Display::displayGrid<Display::DString>(board, true);
+    d << Display::displayGrid<Display::DString>(board, false);
     d.print();
 
     cout << "Tour " << iterationCount << endl;

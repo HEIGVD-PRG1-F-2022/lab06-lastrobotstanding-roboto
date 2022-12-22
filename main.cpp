@@ -13,19 +13,19 @@
 using namespace std;
 
 
-const int ROBOT_NUMBER = 6;
+const int ROBOT_NUMBER = 7;
 int main() {
     //The list and number of robots we want to play with
-    const vector<RobotPack> robotPacks = {{"Roboto", 5}, {"BetterRoboto", 1}, {"RandomRoboto", 5}};
+    const vector<RobotPack> robotPacks = {{"Roboto", 4}, {"BetterR", 1}, {"RandomRoboto", 2}};
 
-    const bool TEST_MODE = true;                //the test mode runs TEST_ROUNDS_NUMBER rounds without display and show live stats
+    const bool TEST_MODE = false;               //the test mode runs TEST_ROUNDS_NUMBER rounds without display and show live stats
     const unsigned int TEST_ROUNDS_NUMBER = 250;//number of rounds for the test mode
 
     //Seed randomness and init console
     srand(time(0));
     Display::init();
 
-    //Run test mode or a single round
+    //Run test mode with hundreds of rounds or a single round
     if (TEST_MODE) {
         vector<string> winnersList;
         map<string, unsigned> counters;
