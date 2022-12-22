@@ -5,6 +5,7 @@
 #ifndef REFACTOR_ROBOTO_H
 #define REFACTOR_ROBOTO_H
 
+#include <librobots/Direction.h>
 #include <librobots/Message.h>
 #include <librobots/Robot.h>
 #include <string>
@@ -24,7 +25,7 @@ class Roboto : public Robot {
     unsigned minEnergyLevel = 10;
 
     std::string chooseAction(UpdatesPack pack);
-    Direction escapeDirection(std::string board);
+    Direction escapeDirection(std::string board, std::vector<Direction> robotsDirections);
 
 public:
     Roboto() = default;
