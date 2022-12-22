@@ -72,8 +72,9 @@ string Roboto::chooseAction(UpdatesPack pack) {
                     touchingAnotherRobot = true;
                 }
             }
+
             for (Direction direction: boniDirections) {
-                if (direction.mag() <= 2) {//if touching bonus
+                if (direction.mag() <= 2) {//if bonus is touching us
                     for (Direction directionRobot: robotsDirections) {
                         //TODO: c'est +?
                         if ((Position(direction.getdX(), direction.getdY()).directionTo(Position(directionRobot.getdX(), direction.getdY()))).mag() <= 2) {
@@ -84,6 +85,16 @@ string Roboto::chooseAction(UpdatesPack pack) {
                     return Message::actionMove(direction);
                     //TODO: touching robot
                 } else if (touchingAnotherRobot) {//if touching robot
+                    sort(robotsDirections.begin(), robotsDirections.end(),
+                         [](Direction first, Direction second) -> bool {
+                             return first.mag() < second.mag();
+                         });
+                    return Message::actionAttack(robotsDirections.at(0));//attack closest
+                } else if (direction.mag() <= 3) {                       //if bonus is a distant one
+                    return Message::actionMove(direction);               //move a first step in the direction of the bonus (will touch it at the next round)
+
+                } else {
+                    //Attack the closest (could be a distant one...)
                     sort(robotsDirections.begin(), robotsDirections.end(),
                          [](Direction first, Direction second) -> bool {
                              return first.mag() < second.mag();
