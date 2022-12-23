@@ -19,21 +19,20 @@ Description     : Last Robot Standing
 
 
 class Game {
-    std::vector<RobotState> robots;
-    std::vector<Bonus> boni;
-    unsigned nbRobots;
+    std::vector<RobotState> robots; //vector of robots in game
+    std::vector<Bonus> boni;        //vector of boni in game
+    unsigned nbRobots;              //number of robots in game
 
 public:
-    // recoit les actions des robots, les applique, écrit les string update et les envoie aux robots
-    size_t size;                     //pas constant sinon le compilateur ne me laisse pas l'initialiser séparément
-    explicit Game(unsigned nbRobots);//constructeur
-    std::string start(std::vector<RobotPack> robotPacks, bool displayMode = true);
-    void generateRobots(const std::vector<RobotPack> &robotPacks);//fonction
-    std::vector<RobotState *> getLivingRobots();
-    void printBoard(unsigned iterationCount);
-    std::vector<std::vector<Display::DString>> buildDynamicBoard();
-    void printStats(unsigned iterationCount);
-    static void printStat(const RobotState &state, unsigned index);
+    size_t size;                     //not constant in order to initialize separately
+    explicit Game(unsigned nbRobots);//constructor
+    std::string start(std::vector<RobotPack> robotPacks, bool displayMode = true);//main function: receives robots actions, applies them, writes updates strings and sends them to robots
+    void generateRobots(const std::vector<RobotPack> &robotPacks);  //function to generate robots on the board at random coordinates
+    std::vector<RobotState *> getLivingRobots();                    //function to get vector of all still living robots on board
+    void printBoard(unsigned iterationCount);                       //function to print the board
+    std::vector<std::vector<Display::DString>> buildDynamicBoard(); //function to build the board updated for each turn
+    void printStats(unsigned iterationCount);                       //function to print the stats for all robots and the turn iteration
+    static void printStat(const RobotState &state, unsigned index); //function to print the stats for one robot
 };
 
 

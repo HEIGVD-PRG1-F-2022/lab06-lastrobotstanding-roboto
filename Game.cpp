@@ -334,8 +334,6 @@ void Game::printStat(const RobotState &state, unsigned index) {
         ostringstream position;
 
         if (action.msg == MessageType::ActionAttack || action.msg == MessageType::ActionMove) {
-            // position << " (" << setw(3) << action.robots.at(0).getdX()
-            //  << "," << setw(3) << action.robots.at(0).getY() << ")";
             position << " " << action.robots.at(0);
         }
         stream << state.getAction().getMessageType()
