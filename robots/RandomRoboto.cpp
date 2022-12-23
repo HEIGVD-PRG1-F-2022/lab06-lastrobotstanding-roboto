@@ -34,6 +34,6 @@ string RandomRoboto::name() const {
 }
 
 //string RandomRoboto::chooseAction() {
-//    //TODO: Implement RandomRoboto strategy
+//
 //    return "";
 //}

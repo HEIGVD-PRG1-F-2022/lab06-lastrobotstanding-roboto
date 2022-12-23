@@ -282,7 +282,6 @@ void Game::printBoard(unsigned iterationCount) {
 
     //TODO: use cursor position to have a smooth animation
     //SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {0,0});
-    //TODO: colorize cases depending on the robot name to different robot classes
     Display::DString d(Display::Color::GREEN);
     d << "LastRobotStanding - Game in progress...\n";
     d.setColor(Display::Color::WHITE);

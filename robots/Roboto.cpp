@@ -54,7 +54,6 @@ string Roboto::name() const {
 }
 
 string Roboto::chooseAction(const UpdatesPack& pack) {
-    //TODO: Implement roboto strategy
 
     const unsigned nbRobots = pow((width / 10), 2);
     vector<Direction> robotsDirections = pack.boardUpdate.robots;
@@ -74,14 +73,12 @@ string Roboto::chooseAction(const UpdatesPack& pack) {
             for (Direction direction: boniDirections) {
                 if (direction.mag() <= 2) {//if bonus is touching us
                     for (Direction directionRobot: robotsDirections) {
-                        //TODO: c'est +?
                         if ((Position(direction.getdX(), direction.getdY()).directionTo(Position(directionRobot.getdX(), direction.getdY()))).mag() <= 2) {
                             return Message::actionAttack(directionRobot);
                         }
                     }
                     //Else take the bonus
                     return Message::actionMove(direction);
-                    //TODO: touching robot
                 } else if (touchingAnotherRobot) {//if touching robot
                     sort(robotsDirections.begin(), robotsDirections.end(),
                          [](Direction first, Direction second) -> bool {
@@ -117,7 +114,6 @@ string Roboto::chooseAction(const UpdatesPack& pack) {
             for (Direction direction: boniDirections) {
                 for (Direction directionRobot: robotsDirections) {
                     if (direction.mag() >= (Position(direction.getdX(), direction.getdY()).directionTo(Position(directionRobot.getdX(), directionRobot.getdY()))).mag()) {
-                        //TODO: celui-là?
                         return Message::actionAttack(directionRobot);
                     }
                 }
@@ -141,7 +137,6 @@ string Roboto::chooseAction(const UpdatesPack& pack) {
 Direction Roboto::escapeDirection(const vector<Direction>& robotsDirections) {
 
     //    Map touchingRobotsPerCells
-    //TODO: remplacer par FOR EACH
 
     vector<int> touchingRobotsPerCells;
     vector<int> distantRobotsPerCells;
