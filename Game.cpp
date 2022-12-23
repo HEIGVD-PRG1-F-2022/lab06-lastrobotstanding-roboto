@@ -42,11 +42,6 @@ Game::Game(unsigned nbRobots) : nbRobots(nbRobots) {
 }
 
 string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
-    Display::DString d(Display::Color::GREEN);
-    d << "Welcome in LastRobotStanding, the fight has started...\n";
-    if (displayMode) {
-        d.print();
-    }
     generateRobots(robotPacks);
 
     //game loop
@@ -195,13 +190,14 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
     }
     vector<RobotState *> finalLivingRobots = getLivingRobots();
     string winner;
+    Display::DString d;
     if (finalLivingRobots.size() == 1) {
         winner = finalLivingRobots.at(0)->getName();
         d.setColor(Display::Color::ORANGE);
-        d << "The winner is " << winner << "\n";
+        d << "The winner is " << winner << "\n\n";
     } else {
         d.setColor(Display::Color::BLUE);
-        d << "The game stopped because " << (100 * nbRobots) << " turns have happened without any attack...\n";
+        d << "The game stopped because " << (100 * nbRobots) << " turns have happened without any attack...\n\n";
         if (displayMode) {
             printStats(iterationCount);
         }
@@ -290,12 +286,9 @@ void Game::printBoard(unsigned iterationCount) {
     vector<vector<Display::DString>> board = buildDynamicBoard();
 
     Display::clearScreen();
-    //printf("%c[%d;%df", 0x1B, 0, 0);
 
-    //TODO: use cursor position to have a smooth animation
-    //SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {0,0});
-    Display::DString d(Display::Color::GREEN);
-    d << "LastRobotStanding - Game in progress...\n";
+    Display::DString d(Display::Color::AQUA);
+    d << "LastRobotStanding - Game in progress:\n\n";
     d.setColor(Display::Color::WHITE);
     d << Display::displayGrid<Display::DString>(board, false);
     d.print();
@@ -305,10 +298,11 @@ void Game::printBoard(unsigned iterationCount) {
 
 void Game::printStats(unsigned iterationCount) {
 
-    cout << "Tour " << iterationCount << endl;
     ostringstream header;
 
-    header << "ID "
+    header << endl
+           << "Tour " << iterationCount << endl
+           << "ID "
            << setw(13) << left << "Name"
            << setw(9) << left << "Position"
            << setw(7) << left << "Energy"
