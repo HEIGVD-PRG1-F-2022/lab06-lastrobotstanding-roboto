@@ -8,6 +8,7 @@
 using namespace std;
 
 string RandomRoboto::action(vector<string> updates) {
+    return chooseAction(receiveUpdates(updates));
 }
 
 string RandomRoboto::name() const {
