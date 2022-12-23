@@ -1,4 +1,22 @@
-# Last robot standing
+# LastRobotStanding
+A Game called LastRobotStanding, developed in C++ in the terminal for the PRG1 class. The project is graded.
+
+## How to use
+You need cmake and git.
+1. Clone the repos: `git clone https://github.com/HEIGVD-PRG1-F-2022/lab06-lastrobotstanding-roboto.git`
+1. Compile the project (if you don't have CLion): `cmake . -Bbuild && cmake --build build/`
+1. Execute the binary: `./build/LastRobotStanding`
+
+This project can be developed in CLion (CMakeLists.txt available) or other IDE such as VSCode.
+
+## Visual overview
+View of the game:
+![game-view.png](imgs/game-view.png)
+View of the test mode (running hundreds of rounds without display to test robots' strategy):
+TODO
+
+## Review of the teacher
+The code review and the grade is available here: https://github.com/HEIGVD-PRG1-F-2022/lab06-lastrobotstanding-roboto/pull/1
 
 ## Conception
 ### Class diagram
@@ -34,6 +52,8 @@ classDiagram
 		+string computeBoardAsString()
 	}
 ```
+
+*Note: Mermaid doesn't support nested types (so `vector vector<string> structure` is given as a replacement of `vector<vector<string>> structure`).*
 
 ### Enums
 ```cpp
