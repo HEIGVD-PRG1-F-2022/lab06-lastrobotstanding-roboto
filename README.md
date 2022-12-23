@@ -19,17 +19,17 @@ TODO
 The code review and the grade is available here: https://github.com/HEIGVD-PRG1-F-2022/lab06-lastrobotstanding-roboto/pull/1
 
 ## Conception
+This project use a lot of classes from 2 libraries: [librobots](https://github.com/HEIGVD-PRG1-F-2022/librobots) (RobotState, Position, Direction, Message, Bonus and Robot) and [libdio](https://github.com/HEIGVD-PRG1-F-2022/libdio) (Display).
+
 ### Class diagram
 ```mermaid
 classDiagram
 	direction TB
-	RobotState --o Roboto
-	RobotState --o BetterR
-	RobotState --o RandomRoboto
+	RobotState --o Robot
 	Game --o RobotState
-	Robot --|> Roboto : Inheritance
-	Robot --|> BetterR : Inheritance
-	Robot --|> RandomRoboto : Inheritance
+	Robot <|-- Roboto : Inheritance
+	Roboto <|-- BetterR : Inheritance
+	Roboto <|-- RandomRoboto : Inheritance
 	class Roboto {
 		-vector vector~Case~ board
 		-size_t width
@@ -73,6 +73,7 @@ classDiagram
 		static void printStat(const RobotState& state, unsigned index)
 	}
 ```
+`Robot` and `RobotState` are implemented in the librobots library and not described here.
 
 *Note: Mermaid doesn't support nested types (so `vector vector<string> structure` is given as a replacement of `vector<vector<string>> structure`).*
 
