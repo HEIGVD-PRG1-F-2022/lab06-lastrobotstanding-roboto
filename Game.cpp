@@ -26,6 +26,9 @@ const int BASE_POWER = 1;
 using namespace std;
 
 Game::Game(unsigned nbRobots) : nbRobots(nbRobots) {
+    //Seed randomness and init console
+    srand(time(0));
+    Display::init();
     size = (size_t) sqrt(nbRobots) * 10;
 }
 
