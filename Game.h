@@ -24,9 +24,9 @@ public:
     std::string start(std::vector<RobotPack> robotPacks, bool displayMode = true);
     void generateRobots(const std::vector<RobotPack>& robotPacks);//fonction
     std::vector<RobotState *> getLivingRobots();
-    void printBoard(unsigned iterationCount);
+    void printBoard(unsigned iterationCount, bool GameIsFinished);
     std::vector<std::vector<Display::DString>> buildDynamicBoard();
-    void printStats(unsigned iterationCount);
+    void printStats(unsigned iterationCount, bool gameIsFinished);
     static void printStat(const RobotState& state, unsigned index);
 };
 
