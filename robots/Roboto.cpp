@@ -21,8 +21,6 @@ void Roboto::setConfig(size_t w, size_t h, unsigned e, unsigned p) {
     height = h;
     energy = e;
     power = p;
-    //TODO: should we initialize the board or not ?
-    // board = vector<vector<Case>>(w, vector<string>(h, EMPTY));
 }
 
 UpdatesPack Roboto::receiveUpdates(const vector<string> &updates) {
