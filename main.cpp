@@ -8,7 +8,6 @@ Description     : Last Robot Standing
 */
 #include "Game.h"
 #include "helper.h"
-#include <libdio/display.h>
 
 #include <ctime>
 #include <map>
@@ -25,10 +24,6 @@ int main() {
 
     const bool TEST_MODE = false;               //the test mode runs TEST_ROUNDS_NUMBER rounds without display and show live stats
     const unsigned int TEST_ROUNDS_NUMBER = 250;//number of rounds for the test mode
-
-    //Seed randomness and init console
-    srand(time(0));
-    Display::init();
 
     //Run test mode with hundreds of rounds or a single round
     if (TEST_MODE) {
