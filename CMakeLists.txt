@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.23)
-project(Refactor)
+project(LastRobotStanding)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Refactor main.cpp robots/Roboto.cpp robots/Roboto.h robots/RandomRoboto.cpp robots/RandomRoboto.h robots/BetterR.cpp robots/BetterR.h Game.cpp Game.h helper.cpp helper.h)
+add_executable(LastRobotStanding main.cpp robots/Roboto.cpp robots/Roboto.h robots/RandomRoboto.cpp robots/RandomRoboto.h robots/BetterR.cpp robots/BetterR.h Game.cpp Game.h helper.cpp helper.h)
 
 include(FetchContent) # once in the project to include the module
 
@@ -23,5 +23,5 @@ FetchContent_Declare(librobots
 FetchContent_MakeAvailable(librobots)
 
 # Replace `PROJECT` with the name of your executable
-target_link_libraries(Refactor PRIVATE libdio)
-target_link_libraries(Refactor PRIVATE librobots)
+target_link_libraries(LastRobotStanding PRIVATE libdio)
+target_link_libraries(LastRobotStanding PRIVATE librobots)
