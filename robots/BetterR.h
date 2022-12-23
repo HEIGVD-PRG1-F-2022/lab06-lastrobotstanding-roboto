@@ -20,8 +20,8 @@ class BetterR : public Roboto {
 
 public:
     BetterR() = default;
-    std::string action(std::vector<std::string> updates);
-    std::string name() const;
+    std::string action(std::vector<std::string> updates) override;
+    std::string name() const override;
 };
 
 
