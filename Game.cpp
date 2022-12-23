@@ -30,6 +30,7 @@ Description     : Last Robot Standing
 
 const int BASE_ENERGY = 10;
 const int BASE_POWER = 1;
+const char CELL_BONUS_CHAR = 'B';
 
 using namespace std;
 
@@ -266,7 +267,7 @@ vector<vector<Display::DString>> Game::buildDynamicBoard() {
     for (const Bonus &bonus: boni) {
         Display::DString &cell = board.at(bonus.pos.getX()).at(bonus.pos.getY());
         cell.setColor(Display::Color::YELLOW);
-        cell << "B";
+        cell << CELL_BONUS_CHAR;
     }
 
     return board;
