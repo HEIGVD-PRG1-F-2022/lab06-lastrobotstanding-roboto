@@ -112,7 +112,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
 
         //After moves, check collisions (2 robots on the same case) and apply rules of collision
         for (size_t i = 0; i < livingRobots.size(); i++) {
-            RobotState *oneRobot = livingRobots.at(i);//TODO: should we declare the variable before ?
+            RobotState *oneRobot = livingRobots.at(i);
             for (size_t j = i + 1; j < livingRobots.size(); j++) {
                 RobotState *otherRobot = livingRobots.at(j);
 
