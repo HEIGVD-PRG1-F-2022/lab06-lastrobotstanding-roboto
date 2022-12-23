@@ -24,32 +24,53 @@ The code review and the grade is available here: https://github.com/HEIGVD-PRG1-
 classDiagram
 	direction TB
 	RobotState --o Roboto
+	RobotState --o BetterR
+	RobotState --o RandomRoboto
 	Game --o RobotState
+	Robot --|> Roboto : Inheritance
+	Robot --|> BetterR : Inheritance
+	Robot --|> RandomRoboto : Inheritance
 	class Roboto {
 		-vector vector~Case~ board
 		-size_t width
 		-size_t height
 		-unsigned energy
 		-unsigned power
-		+Roboto()
-		+void setConfig(size_t width, size_t height, unsigned energy, unsigned power)
-		+string action(vector~string~ updates)
-		+static string name()
-		-void extractBoard(string update)
-		-Damage receiveDamage(string update)
+		-unsigned iteration
+		-unsigned minEnergyLevel
 		-string chooseAction()
-		+Case readOnBoard(int relativeX, int relativeY)
+		-static Direction escapeDirection(const vector~Direction~& robotsDirections)
+		+Roboto()
+		+void setConfig(size_t width, size_t height, unsigned energy, unsigned power) override
+		+UpdatesPack reveiveUpdates(const vector~string~ updates)
+		+string action(vector~string~ updates) override
+		+static string name() const override
+	}
+	class BetterR {
+	    -string chooseAction(UpdatesPack pack)
+	    +BetterR()
+	    +string action(vector~string~ updates) override
+	    +string name() const override
+	}
+	class RandomRoboto {
+	    -string chooseAction(UpdatesPack pack)
+	    +RandomRoboto()
+	    +string action(vector~string~ updates) override
+	    +string name() const override
 	}
 	class Game {
-		+const size_t size
 		-vector ~RobotState~ robots
+		-vector~Bonus~ boni
 		-unsigned nbRobots
-		+Game(unsigned nbRobots)
-		+void start()
-		+void generateRobots(unsigned nbRobots)
-		+void printBoard()
-		+vector vector~string~ buildDynamicBoard()
-		+string computeBoardAsString()
+		+const size_t size
+		+explicit Game(unsigned nbRobots)
+		+string start(vector~RobotPack~ robotpacks, bool displayMode = true)
+		+void generateRobots(const vector~RobotPack~& robotpacks)
+		+vector~RobotState *~ getLivingRobots()
+		+void printBoard(unsigned iterationCount)
+		+vector vector~vector Display::Dstring~ buildDynamicBoard()
+		+void printStats(unsigned iterationCount)
+		static void printStat(const RobotState& state, unsigned index)
 	}
 ```
 
@@ -62,11 +83,11 @@ enum Case { EMPTY, SELF, OTHER, BONUS };
 
 ### Struct
 ```cpp
-struct Damage {
-	int attackerX;
-	int attackerY;
-	unsigned energyLoss;
-}
+struct UpdatesPack {
+    Message boardUpdate;
+    std::vector<Message> bonusUpdates;
+    std::vector<Message> damageUpdates;
+};
 ```
 
 ### Algorithms

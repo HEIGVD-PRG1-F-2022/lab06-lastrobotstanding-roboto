@@ -6,8 +6,8 @@ Date creation   : 29.11.2022
 Description     : Last Robot Standing
 -----------------------------------------------------------------------------------
 */
-#ifndef REFACTOR_GAME_H
-#define REFACTOR_GAME_H
+#ifndef GAME_H
+#define GAME_H
 #include "helper.h"
 #include "libdio/display.h"
 #include "librobots/Bonus.h"
@@ -30,11 +30,11 @@ public:
     std::string start(std::vector<RobotPack> robotPacks, bool displayMode = true);
     void generateRobots(const std::vector<RobotPack>& robotPacks);//fonction
     std::vector<RobotState *> getLivingRobots();
-    void printBoard(unsigned iterationCount, bool GameIsFinished);
+    void printBoard(unsigned iterationCount);
     std::vector<std::vector<Display::DString>> buildDynamicBoard();
-    void printStats(unsigned iterationCount, bool gameIsFinished);
+    void printStats(unsigned iterationCount);
     static void printStat(const RobotState& state, unsigned index);
 };
 
 
-#endif//REFACTOR_GAME_H
+#endif//GAME_H

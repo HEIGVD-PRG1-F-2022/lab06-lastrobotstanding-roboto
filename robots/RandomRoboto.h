@@ -19,8 +19,8 @@ class RandomRoboto : public Roboto {
 
 public:
     RandomRoboto() = default;
-    std::string action(std::vector<std::string> updates);
-    [[nodiscard]] std::string name() const;
+    std::string action(std::vector<std::string> updates) override;
+    [[nodiscard]] std::string name() const override;
 };
 
 
