@@ -10,7 +10,7 @@ Description     : Last Robot Standing
 #define HELPER_H
 #include <string>
 
-//Generate a random number in the interval [min; max[ (max excluded)
+//Generate a random number in the interval [min; max] (max included)
 int getRandomNumber(int min, int max);
 
 //RobotPack used to inform the game how much robots must be created on the board
