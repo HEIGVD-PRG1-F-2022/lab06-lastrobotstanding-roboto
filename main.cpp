@@ -14,12 +14,12 @@ Description     : Last Robot Standing
 #include <vector>
 
 using namespace std;
-const int ROBOT_NUMBER = 7;                 //fixed number of robots (managed separatly than robotPacks to better manage dimensions during testing)
-const bool TEST_MODE = true;               //the test mode runs TEST_ROUNDS_NUMBER rounds without display and show live stats
+const int ROBOT_NUMBER = 8;                 //fixed number of robots (managed separatly than robotPacks to better manage board dimensions during testing)
+const bool TEST_MODE = false;               //the test mode runs TEST_ROUNDS_NUMBER rounds without display and show live stats
 const unsigned int TEST_ROUNDS_NUMBER = 250;//number of rounds for the test mode
 
 //The list and number of robots we want to play with. The number of robots is calculated with this list.
-const vector<RobotPack> robotPacks = {{"Roboto", 1}, {"BetterR", 4}, {"RandomRoboto", 4}};
+const vector<RobotPack> robotPacks = {{"Roboto", 2}, {"BetterR", 3}, {"RandomRoboto", 3}};
 
 int main() {
     //Run test mode with hundreds of rounds or a single round
