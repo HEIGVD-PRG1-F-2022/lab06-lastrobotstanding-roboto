@@ -30,9 +30,9 @@ public:
     std::string start(std::vector<RobotPack> robotPacks, bool displayMode = true);
     void generateRobots(const std::vector<RobotPack>& robotPacks);//fonction
     std::vector<RobotState *> getLivingRobots();
-    void printBoard(unsigned iterationCount, bool GameIsFinished);
+    void printBoard(unsigned iterationCount);
     std::vector<std::vector<Display::DString>> buildDynamicBoard();
-    void printStats(unsigned iterationCount, bool gameIsFinished);
+    void printStats(unsigned iterationCount);
     static void printStat(const RobotState& state, unsigned index);
 };
 

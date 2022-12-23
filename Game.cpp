@@ -185,16 +185,30 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
 
         //Display board and wait only if the display mode is enabled
         if (displayMode) {
-            printBoard(iterationCount, gameIsFinished);
+            printBoard(iterationCount);
             std::this_thread::sleep_for(SLEEP_TIME_BETWEEN_LOOP);//little sleep before next reload
         }
     }
 
-    gameIsFinished = true;
-
     //Display the winner or the reason of game stop and return the winner name
     if (displayMode) {
-        printBoard(iterationCount, gameIsFinished);
+        printBoard(iterationCount);
+    }
+    vector<RobotState *> finalLivingRobots = getLivingRobots();
+    string winner;
+    if (finalLivingRobots.size() == 1) {
+        winner = finalLivingRobots.at(0)->getName();
+        d.setColor(Display::Color::ORANGE);
+        d << "The winner is " << winner << "\n";
+    } else {
+        d.setColor(Display::Color::BLUE);
+        d << "The game stopped because " << (100 * nbRobots) << " turns have happened without any attack...\n";
+        if (displayMode) {
+            printStats(iterationCount);
+        }
+    }
+    if (displayMode) {
+        d.print();
     }
 }
 
@@ -236,8 +250,7 @@ vector<RobotState *> Game::getLivingRobots() {
 }
 
 vector<vector<Display::DString>> Game::buildDynamicBoard() {
-    vector<vector<Display::DString>> board = vector<vector<Display::DString>>(size, vector<Display::DString>(size,
-                                                                                                             Display::DString()));
+    vector<vector<Display::DString>> board = vector<vector<Display::DString>>(size, vector<Display::DString>(size, Display::DString()));
 
     //For each RobotState we add them in the board with their number
     int index = 1;
@@ -273,7 +286,7 @@ vector<vector<Display::DString>> Game::buildDynamicBoard() {
     return board;
 }
 
-void Game::printBoard(unsigned iterationCount, bool gameIsFinished) {
+void Game::printBoard(unsigned iterationCount) {
     //Create an empty board
     vector<vector<Display::DString>> board = buildDynamicBoard();
 
@@ -288,10 +301,10 @@ void Game::printBoard(unsigned iterationCount, bool gameIsFinished) {
     d << Display::displayGrid<Display::DString>(board, false);
     d.print();
 
-    printStats(iterationCount, gameIsFinished);
+    printStats(iterationCount);
 }
 
-void Game::printStats(unsigned iterationCount, bool gameIsFinished) {
+void Game::printStats(unsigned iterationCount) {
 
     cout << "Tour " << iterationCount << endl;
     ostringstream header;
@@ -311,21 +324,6 @@ void Game::printStats(unsigned iterationCount, bool gameIsFinished) {
         printStat(state, index);
         index++;
     }
-    if (gameIsFinished) {
-        Display::DString d(Display::Color::WHITE);
-        vector<RobotState *> finalLivingRobots = getLivingRobots();
-        string winner;
-        if (finalLivingRobots.size() == 1) {
-            winner = finalLivingRobots.at(0)->getName();
-            d.setColor(Display::Color::ORANGE);
-            d << "The winner is " << winner << "\n";
-        } else {
-            d.setColor(Display::Color::BLUE);
-            d << "The game stopped because " << (100 * nbRobots) << " turns have happened without any attack...\n";
-        }
-        d.print();
-    }
-
 }
 
 void Game::printStat(const RobotState &state, unsigned index) {
