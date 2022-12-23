@@ -281,7 +281,7 @@ void Game::printBoard(unsigned iterationCount) {
     //Create an empty board
     vector<vector<Display::DString>> board = buildDynamicBoard();
 
-    // Display::clearScreen();
+    Display::clearScreen();
 
     Display::DString d(Display::Color::AQUA);
     d << "LastRobotStanding - Game in progress:\n\n";
