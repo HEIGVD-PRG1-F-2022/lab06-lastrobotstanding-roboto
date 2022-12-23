@@ -22,7 +22,7 @@ const vector<RobotPack> robotPacks = {{"Roboto", 2}, {"BetterR", 3}, {"RandomRob
 View of the game:
 ![game-view.png](imgs/game-view.png)
 View of the test mode (running hundreds of rounds without display to test robots' strategy):
-TODO
+![testmode.png](imgs/testmode.png)
 
 ## Review of the teacher
 The code review and the grade is available here: https://github.com/HEIGVD-PRG1-F-2022/lab06-lastrobotstanding-roboto/pull/1
