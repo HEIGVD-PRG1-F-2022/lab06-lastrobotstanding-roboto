@@ -10,9 +10,6 @@ Description     : Last Robot Standing
 #include "Roboto.h"
 #include "librobots/Direction.h"
 #include "librobots/Message.h"
-#include <algorithm>
-#include <iostream>
-#include <random>
 #include <vector>
 
 using namespace std;
@@ -25,8 +22,6 @@ string BetterR::name() const {
     return "BetterR";
 }
 
-string BetterR::chooseAction(UpdatesPack pack) {
-
-
+string BetterR::chooseAction(const UpdatesPack &pack) {
     return Message::actionMove(Direction(-1, 0));
 }

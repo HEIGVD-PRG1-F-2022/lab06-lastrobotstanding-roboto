@@ -23,7 +23,7 @@ string RandomRoboto::name() const {
     return "RandomRoboto";
 }
 
-string RandomRoboto::chooseAction(UpdatesPack pack) {
+string RandomRoboto::chooseAction(const UpdatesPack &pack) {
     int dX, dY;
     if ((rand() % 10 == 0)) {
         dX = (rand() % 10 == 0) ? 1 : -1;

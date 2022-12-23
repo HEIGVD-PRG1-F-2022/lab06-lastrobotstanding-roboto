@@ -15,7 +15,7 @@ Description     : Last Robot Standing
 #include <vector>
 
 class RandomRoboto : public Roboto {
-    std::string chooseAction(UpdatesPack pack);
+    std::string chooseAction(const UpdatesPack &pack);
 
 public:
     RandomRoboto() = default;

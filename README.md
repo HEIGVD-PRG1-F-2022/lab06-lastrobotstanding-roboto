@@ -47,13 +47,13 @@ classDiagram
 		+static string name() const override
 	}
 	class BetterR {
-	    -string chooseAction(UpdatesPack pack)
+	    -string chooseAction(const UpdatesPack &pack)
 	    +BetterR()
 	    +string action(vector~string~ updates) override
 	    +string name() const override
 	}
 	class RandomRoboto {
-	    -string chooseAction(UpdatesPack pack)
+	    -string chooseAction(const UpdatesPack &pack)
 	    +RandomRoboto()
 	    +string action(vector~string~ updates) override
 	    +string name() const override

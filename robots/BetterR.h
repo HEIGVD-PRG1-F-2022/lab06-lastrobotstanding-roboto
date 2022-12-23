@@ -16,7 +16,7 @@ Description     : Last Robot Standing
 
 
 class BetterR : public Roboto {
-    std::string chooseAction(UpdatesPack pack);
+    std::string chooseAction(const UpdatesPack &pack);
 
 public:
     BetterR() = default;

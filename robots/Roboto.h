@@ -28,8 +28,8 @@ class Roboto : public Robot {
     unsigned iteration = 0;
     unsigned minEnergyLevel = 10;
 
-    std::string chooseAction(const UpdatesPack& pack);
-    static Direction escapeDirection(const std::vector<Direction>& robotsDirections);
+    std::string chooseAction(const UpdatesPack &pack);
+    static Direction escapeDirection(const std::vector<Direction> &robotsDirections);
 
 public:
     Roboto() = default;
