@@ -163,7 +163,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
 
         //Generate new bonus each 20/nbRobots iteration (iterationCount starts at 1 to avoid having a bonus for the first iteration)
         if (iterationCount % (20 / nbRobots) == 0) {
-            BonusType type = (getRandomNumber(0, 1) == 0 ? BonusType::Energy
+            BonusType type = (getRandomNumber(0, 2) == 0 ? BonusType::Energy
                                                          : BonusType::Power);           //Choose randomly the type of bonus (energy or power)
             Bonus bonus(size, size, (type == BonusType::Energy ? BONUS_MAX_ENERGY : BONUS_MAX_POWER),
                         type);//Create the bonus with a random maximum (depending on the bonus type)
