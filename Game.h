@@ -6,8 +6,8 @@ Date creation   : 29.11.2022
 Description     : Last Robot Standing
 -----------------------------------------------------------------------------------
 */
-#ifndef REFACTOR_GAME_H
-#define REFACTOR_GAME_H
+#ifndef GAME_H
+#define GAME_H
 #include "helper.h"
 #include "libdio/display.h"
 #include "librobots/Bonus.h"
@@ -37,4 +37,4 @@ public:
 };
 
 
-#endif//REFACTOR_GAME_H
+#endif//GAME_H

@@ -6,8 +6,8 @@ Date creation   : 29.11.2022
 Description     : Last Robot Standing
 -----------------------------------------------------------------------------------
 */
-#ifndef REFACTOR_ROBOTO_H
-#define REFACTOR_ROBOTO_H
+#ifndef ROBOTO_H
+#define ROBOTO_H
 
 #include <librobots/Direction.h>
 #include <librobots/Message.h>
@@ -40,4 +40,4 @@ public:
 };
 
 
-#endif//REFACTOR_ROBOTO_H
+#endif//ROBOTO_H
