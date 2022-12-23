@@ -22,13 +22,12 @@ public:
     size_t size;                     //pas constant sinon le compilateur ne me laisse pas l'initialiser séparément
     explicit Game(unsigned nbRobots);//constructeur
     std::string start(std::vector<RobotPack> robotPacks, bool displayMode = true);
-    void generateRobots(std::vector<RobotPack> robotPacks);//fonction
+    void generateRobots(const std::vector<RobotPack>& robotPacks);//fonction
     std::vector<RobotState *> getLivingRobots();
     void printBoard(unsigned iterationCount);
     std::vector<std::vector<Display::DString>> buildDynamicBoard();
     void printStats();
-    void printStat(RobotState state, unsigned index);
-    void ourClearScreen();
+    static void printStat(const RobotState& state, unsigned index);
 };
 
 

@@ -1,11 +1,8 @@
 #include "Game.h"
 #include "helper.h"
 #include <libdio/display.h>
-#include <libdio/input.h>
 
 #include <ctime>
-#include <iomanip>
-#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
@@ -18,7 +15,7 @@ int main() {
     //The list and number of robots we want to play with
     const vector<RobotPack> robotPacks = {{"Roboto", 4}, {"BetterR", 1}, {"RandomRoboto", 2}};
 
-    const bool TEST_MODE = false;               //the test mode runs TEST_ROUNDS_NUMBER rounds without display and show live stats
+    const bool TEST_MODE = true;               //the test mode runs TEST_ROUNDS_NUMBER rounds without display and show live stats
     const unsigned int TEST_ROUNDS_NUMBER = 250;//number of rounds for the test mode
 
     //Seed randomness and init console
@@ -40,11 +37,11 @@ int main() {
 
             //Calculate and display live statistics
             counters.clear();
-            for (auto pack: robotPacks) {
+            for (const auto& pack: robotPacks) {
                 counters.insert({pack.className, 0});//set counters to 0 for all robot classes
             }
             //Count the entire list
-            for (auto currentWinner: winnersList) {
+            for (const auto& currentWinner: winnersList) {
                 counters.at(currentWinner)++;
             }
             //Order by descending wins count
@@ -57,7 +54,7 @@ int main() {
             Display::DString stats(Display::Color::AQUA);
             stats << "LIVE STATS - Round: " << i << "/" << TEST_ROUNDS_NUMBER << ":\n";
             stats.setColor(Display::Color::ORANGE);
-            for (auto count: orderedCounters) {
+            for (const auto& count: orderedCounters) {
                 stats << count.first << " " << count.second << " wins - " << (int) ((double) count.second / i * 100) << "% \n";
             }
             Display::clearScreen();

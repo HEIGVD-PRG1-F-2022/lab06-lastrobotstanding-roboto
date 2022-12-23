@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "helper.h"
-#include "robots/BetterR.h"
+//#include "robots/BetterR.h"
 #include "robots/RandomRoboto.h"
 #include "robots/Roboto.h"
 #include <algorithm>
@@ -198,7 +198,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
     return winner;
 }
 
-void Game::generateRobots(vector<RobotPack> robotPacks) {
+void Game::generateRobots(const vector<RobotPack>& robotPacks) {
     for (const RobotPack &pack: robotPacks) {
         int randomX, randomY;
         for (int i = 1; i <= pack.number; i++) {
@@ -206,6 +206,7 @@ void Game::generateRobots(vector<RobotPack> robotPacks) {
             randomY = getRandomNumber(0, (int) size - 1);
             Position pos(randomX, randomY, size, size);
 
+            //TODO: fix bug
             if (pack.className == "RandomRoboto") {
                 auto *robot = new RandomRoboto();
                 robot->setConfig(size, size, BASE_ENERGY, BASE_POWER);
@@ -214,11 +215,12 @@ void Game::generateRobots(vector<RobotPack> robotPacks) {
                 auto *robot = new Roboto();
                 robot->setConfig(size, size, BASE_ENERGY, BASE_POWER);
                 robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
-            } else if (pack.className == "BetterR") {
-                auto *robot = new BetterR();
-                robot->setConfig(size, size, BASE_ENERGY, BASE_POWER);
-                robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
             }
+//            else if (pack.className == "BetterR") {
+//                auto *robot = new BetterR();
+//                robot->setConfig(size, size, BASE_ENERGY, BASE_POWER);
+//                robots.push_back(RobotState(robot, pos, size, BASE_ENERGY, BASE_POWER));
+//            }
         }
     }
 }
@@ -308,10 +310,10 @@ void Game::printStats() {
     for (const RobotState &state: robots) {
         printStat(state, index);
         index++;
-    };
+    }
 }
 
-void Game::printStat(RobotState state, unsigned index) {
+void Game::printStat(const RobotState& state, unsigned index) {
     Display::DString stat;
     ostringstream stream;
 

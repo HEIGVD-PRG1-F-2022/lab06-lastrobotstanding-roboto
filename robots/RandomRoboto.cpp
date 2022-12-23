@@ -33,7 +33,7 @@ string RandomRoboto::name() const {
     return "RandomRoboto";
 }
 
-string RandomRoboto::chooseAction() {
-    //TODO: Implement RandomRoboto strategy
-    return "";
-}
+//string RandomRoboto::chooseAction() {
+//    //TODO: Implement RandomRoboto strategy
+//    return "";
+//}

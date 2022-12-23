@@ -15,14 +15,13 @@ class RandomRoboto {
     unsigned energy, power;
     // std::vector<std::vector<Case>> board;
 
-    Message receiveDamage(std::string update);//fonction
-    std::string chooseAction();
+    //std::string chooseAction();
 
 public:
     RandomRoboto() = default;
     virtual void setConfig(size_t w, size_t h, unsigned e, unsigned p);
     std::string action(std::vector<std::string> updates);//fonction: recoit les updates(string) de game, return l'action qu'il fait en conséquence
-    std::string name() const;
+    [[nodiscard]] std::string name() const;
     // Case readOnBoard(int relativeX, int relativeY);
 };
 
