@@ -101,18 +101,6 @@ struct UpdatesPack {
 ```
 
 ### Algorithms
-
-Goals:
-- getting a lot of bonus
-- getting bonus or escaping is a priority when
-- avoid collisions
-
-case: when an attack received
-
-case si attack received proche et forte, le robot en face a plus de power que nous, fuite.
-TODO remove this part.
-
-
 **Pseudocode of Roboto's strategy:**
 ```cpp
 int minEnergyLevel = 10;
@@ -176,6 +164,8 @@ FUNCTION escapeDirection(board)
 ```
 
 **Pseudocode of BetterR's strategy:**
+This pseudocode is not implemented yet.
+
 Strategy:
 - look at distant bonus
 - use radar
