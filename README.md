@@ -9,6 +9,15 @@ You need cmake and git.
 
 This project can be developed in CLion (CMakeLists.txt available) or other IDE such as VSCode.
 
+## Configuration
+In `main.cpp` you can change the number of robot you want (impact the board size), if you want to run in test mode or not, how much rounds for the test mode, and how much robot of each class.
+```cpp
+const int ROBOT_NUMBER = 8;
+const bool TEST_MODE = false;
+const unsigned int TEST_ROUNDS_NUMBER = 250;
+const vector<RobotPack> robotPacks = {{"Roboto", 2}, {"BetterR", 3}, {"RandomRoboto", 3}};
+```
+
 ## Visual overview
 View of the game:
 ![game-view.png](imgs/game-view.png)
@@ -22,6 +31,11 @@ The code review and the grade is available here: https://github.com/HEIGVD-PRG1-
 This project use a lot of classes from 2 libraries: [librobots](https://github.com/HEIGVD-PRG1-F-2022/librobots) (RobotState, Position, Direction, Message, Bonus and Robot) and [libdio](https://github.com/HEIGVD-PRG1-F-2022/libdio) (Display).
 
 ### Class diagram
+We have 3 robots with each a different strategy to simulate different robots behaviors on the board:
+- `Roboto`: is the smartest one
+- `RandomRoboto`: just moves randomly
+- `BetterR`: moves in diagonal
+
 ```mermaid
 classDiagram
 	direction TB
@@ -87,18 +101,6 @@ struct UpdatesPack {
 ```
 
 ### Algorithms
-
-Goals:
-- getting a lot of bonus
-- getting bonus or escaping is a priority when
-- avoid collisions
-
-case: when an attack received
-
-case si attack received proche et forte, le robot en face a plus de power que nous, fuite.
-TODO remove this part.
-
-
 **Pseudocode of Roboto's strategy:**
 ```cpp
 int minEnergyLevel = 10;
@@ -162,6 +164,8 @@ FUNCTION escapeDirection(board)
 ```
 
 **Pseudocode of BetterR's strategy:**
+This pseudocode is not implemented yet.
+
 Strategy:
 - look at distant bonus
 - use radar

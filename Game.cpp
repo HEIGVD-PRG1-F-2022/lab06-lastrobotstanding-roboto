@@ -68,7 +68,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
         }
         //Build a list of all bonus positions
         boniPositions.clear();
-        for (auto b: boni) {
+        for (const auto &b: boni) {
             boniPositions.push_back(b.pos);
         }
         //Call action() on all robots with the board update (other updates are already present in the RobotState object)
@@ -111,7 +111,6 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
         }
 
         //After moves, check collisions (2 robots on the same case) and apply rules of collision
-        int count = 0;
         for (size_t i = 0; i < livingRobots.size(); i++) {
             RobotState *oneRobot = livingRobots.at(i);
             for (size_t j = i + 1; j < livingRobots.size(); j++) {
@@ -121,7 +120,6 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
                 if (oneRobot->getPosition() == otherRobot->getPosition()) {
                     oneRobot->checkCollision(*otherRobot);//check and apply collision
                 }
-                count++;
             }
         }
 
@@ -138,7 +136,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
                     }
                     it = boni.erase(it);//after erase, the pointer is incremented so we must take the new value
                 } else {
-                    it++;//if no there was no remove, we have to manually increment the iterator
+                    it++;//if there was no remove, we have to manually increment the iterator
                 }
             }
         }
@@ -159,7 +157,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
 
         //Generate new bonus each 20/nbRobots iteration (iterationCount starts at 1 to avoid having a bonus for the first iteration)
         if (iterationCount % (20 / nbRobots) == 0) {
-            BonusType type = (getRandomNumber(0, 2) == 0 ? BonusType::Energy
+            BonusType type = (getRandomNumber(0, 1) == 0 ? BonusType::Energy
                                                          : BonusType::Power);//Choose randomly the type of bonus (energy or power)
             Bonus bonus(size, size, (type == BonusType::Energy ? BONUS_MAX_ENERGY : BONUS_MAX_POWER),
                         type);//Create the bonus with a random maximum (depending on the bonus type)
@@ -283,7 +281,7 @@ void Game::printBoard(unsigned iterationCount) {
     //Create an empty board
     vector<vector<Display::DString>> board = buildDynamicBoard();
 
-    Display::clearScreen();
+    // Display::clearScreen();
 
     Display::DString d(Display::Color::AQUA);
     d << "LastRobotStanding - Game in progress:\n\n";

@@ -9,5 +9,5 @@ Description     : Last Robot Standing
 #include "helper.h"
 
 int getRandomNumber(int min, int max) {
-    return rand() % (max - min) + min;
+    return rand() % (max + 1 - min) + min;
 }
