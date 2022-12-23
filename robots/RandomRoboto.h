@@ -1,7 +1,11 @@
-//
-// Created by s4rac on 30.11.2022.
-//
-
+/*
+-----------------------------------------------------------------------------------
+Nom du fichier  : RandomRoboto.h
+Auteur(s)       : Samuel Roland, Sara Camassa
+Date creation   : 29.11.2022
+Description     : Last Robot Standing
+-----------------------------------------------------------------------------------
+*/
 #ifndef RANDOM_ROBOTO_H
 #define RANDOM_ROBOTO_H
 

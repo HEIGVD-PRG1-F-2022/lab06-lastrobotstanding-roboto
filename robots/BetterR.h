@@ -1,4 +1,11 @@
-
+/*
+-----------------------------------------------------------------------------------
+Nom du fichier  : BetterR.h
+Auteur(s)       : Samuel Roland, Sara Camassa
+Date creation   : 29.11.2022
+Description     : Last Robot Standing
+-----------------------------------------------------------------------------------
+*/
 #ifndef BETTER_R_H
 #define BETTER_R_H
 

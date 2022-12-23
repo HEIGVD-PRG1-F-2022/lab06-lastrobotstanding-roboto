@@ -1,7 +1,13 @@
+/*
+-----------------------------------------------------------------------------------
+Nom du fichier  : Game.h
+Auteur(s)       : Samuel Roland, Sara Camassa
+Date creation   : 29.11.2022
+Description     : Last Robot Standing
+-----------------------------------------------------------------------------------
+*/
 #ifndef REFACTOR_GAME_H
 #define REFACTOR_GAME_H
-
-
 #include "helper.h"
 #include "libdio/display.h"
 #include "librobots/Bonus.h"
