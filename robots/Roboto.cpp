@@ -184,17 +184,4 @@ Direction Roboto::escapeDirection(const vector<Direction> &robotsDirections) {
         index++;
     }
     return cellDirections.at(minIndex);
-
-    //    FOR EACH touching cell including self cell around the robot
-    //    Calculate number of touching robots
-    //    Store number in a map touchingRobotsPerCells at index cell
-    //    Calculate number of distant robots (magnitude >= 2)
-    //    Store number in a map distantRobotsPerCells at index cell
-    //
-    //    Sort the touchingRobotsPerCells map by ascending value
-    //
-    //    IF there is only 1 touchingRobot for on of the cell
-    //    Move to this cell
-    //    ELSE IF more than 1 touchingRobot for on of the cell
-    // return direction;
 }

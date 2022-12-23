@@ -61,7 +61,6 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
     vector<Position> boniPositions;  //list of all positions of bonus
     size_t index = 0;
     vector<RobotState *> livingRobots;
-    bool gameIsFinished = false;
 
     while (iterationWithoutAttack < MAXIMUM_ITERATION_WITHOUT_ATTACK * nbRobots && getLivingRobots().size() > 1) {
         someRobotsAttackedInThisIteration = false;
@@ -220,7 +219,6 @@ void Game::generateRobots(const vector<RobotPack> &robotPacks) {
             randomY = getRandomNumber(0, (int) size - 1);
             Position pos(randomX, randomY, size, size);
 
-            //TODO: fix bug
             if (pack.className == "RandomRoboto") {
                 auto *robot = new RandomRoboto();
                 robot->setConfig(size, size, BASE_ENERGY, BASE_POWER);
