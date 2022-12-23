@@ -16,12 +16,12 @@ Description     : Last Robot Standing
 
 
 class BetterR : public Roboto {
-    std::string chooseAction(const UpdatesPack &pack);
+    std::string chooseAction(const UpdatesPack &pack);//implements the strategy of the action for each round
 
 public:
     BetterR() = default;
-    std::string action(std::vector<std::string> updates) override;
-    std::string name() const override;
+    std::string action(std::vector<std::string> updates) override;//ask the robot action
+    std::string name() const override;                            //get the name of the robot
 };
 
 

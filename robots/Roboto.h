@@ -28,15 +28,15 @@ class Roboto : public Robot {
     unsigned iteration = 0;
     unsigned minEnergyLevel = 10;
 
-    std::string chooseAction(const UpdatesPack &pack);
-    static Direction escapeDirection(const std::vector<Direction> &robotsDirections);
+    std::string chooseAction(const UpdatesPack &pack);                               	
+    static Direction escapeDirection(const std::vector<Direction> &robotsDirections);//choose the better direction when robots around
 
 public:
     Roboto() = default;
-    void setConfig(size_t w, size_t h, unsigned e, unsigned p) override;
-    UpdatesPack receiveUpdates(const std::vector<std::string> &updates);
-    std::string action(std::vector<std::string> updates) override;//fonction: recoit les updates(string) de game, return l'action qu'il fait en conséquence
-    [[nodiscard]] std::string name() const override;
+    void setConfig(size_t w, size_t h, unsigned e, unsigned p) override;//set the configuration
+    UpdatesPack receiveUpdates(const std::vector<std::string> &updates);//receive and apply updates
+    std::string action(std::vector<std::string> updates) override;      //ask the robot action
+    [[nodiscard]] std::string name() const override;                    //get the name of the robot
 };
 
 

@@ -23,6 +23,7 @@ string RandomRoboto::name() const {
     return "RandomRoboto";
 }
 
+//The strategy is a random moved, decaled by a cell every 10 round
 string RandomRoboto::chooseAction(const UpdatesPack &pack) {
     int dX, dY;
     if ((rand() % 10 == 0)) {

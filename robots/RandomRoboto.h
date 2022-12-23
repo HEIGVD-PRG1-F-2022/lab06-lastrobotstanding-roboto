@@ -15,12 +15,12 @@ Description     : Last Robot Standing
 #include <vector>
 
 class RandomRoboto : public Roboto {
-    std::string chooseAction(const UpdatesPack &pack);
+    std::string chooseAction(const UpdatesPack &pack);//implements the strategy of the action for each round
 
 public:
     RandomRoboto() = default;
-    std::string action(std::vector<std::string> updates) override;
-    [[nodiscard]] std::string name() const override;
+    std::string action(std::vector<std::string> updates) override;//ask the robot action
+    [[nodiscard]] std::string name() const override;              //get the name of the robot
 };
 
 

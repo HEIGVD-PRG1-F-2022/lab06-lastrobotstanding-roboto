@@ -24,8 +24,8 @@ void Roboto::setConfig(size_t w, size_t h, unsigned e, unsigned p) {
 }
 
 UpdatesPack Roboto::receiveUpdates(const vector<string> &updates) {
-    Message boardUpdate = Message(
-            updates.at(0));//the boardUpdate is always the first update (see code of RobotState::sendUpdate())
+    //the boardUpdate is always the first update (see code of RobotState::sendUpdate())
+    Message boardUpdate = Message(updates.at(0));
 
     UpdatesPack pack = {.boardUpdate = boardUpdate};//create the pack with the boardUpdate (the only attribute that don't have a default constructor)
 
@@ -60,14 +60,17 @@ string Roboto::name() const {
     return "Roboto";
 }
 
+//Implements the strategy developed in README
 string Roboto::chooseAction(const UpdatesPack &pack) {
 
-    const auto nbRobots = (unsigned) pow((width / 10), 2);
+    const auto nbRobots = (unsigned) pow((width / 10), 2);//estimated size of the board
     vector<Direction> robotsDirections = pack.boardUpdate.robots;
     vector<Direction> boniDirections = pack.boardUpdate.boni;
-    if (energy > minEnergyLevel) {//if a lot of energy
+    //if the robot has a lot of energy
+    if (energy > minEnergyLevel) {
 
-        if (!boniDirections.empty()) {//if bonus in zone
+        //if there is a bonus in zone
+        if (!boniDirections.empty()) {
 
             //Are we touching another robot ?
             bool touchingAnotherRobot = false;
@@ -78,7 +81,9 @@ string Roboto::chooseAction(const UpdatesPack &pack) {
             }
 
             for (Direction direction: boniDirections) {
-                if (direction.mag() <= 2) {//if bonus is touching us
+                //if a bonus is touching us
+                if (direction.mag() <= 2) {
+                    //If another robot is touching the bonus, attack it
                     for (Direction directionRobot: robotsDirections) {
                         if ((Position(direction.getdX(), direction.getdY()).directionTo(Position(directionRobot.getdX(), direction.getdY()))).mag() <= 2) {
                             return Message::actionAttack(directionRobot);
@@ -91,9 +96,10 @@ string Roboto::chooseAction(const UpdatesPack &pack) {
                          [](Direction first, Direction second) -> bool {
                              return first.mag() < second.mag();
                          });
-                    return Message::actionAttack(robotsDirections.at(0));//attack closest
-                } else if (direction.mag() <= 3) {                       //if bonus is a distant one
-                    return Message::actionMove(direction);               //move a first step in the direction of the bonus (will touch it at the next round)
+                    return Message::actionAttack(robotsDirections.at(0));//attack the closest robot to maximize impact
+                } else if (direction.mag() <= 3) {
+                    //if bonus is a distant one move a first step in the direction of the bonus (will touch it at the next round)
+                    return Message::actionMove(direction);
 
                 } else {
                     //Attack the closest (could be a distant one...)
@@ -116,7 +122,7 @@ string Roboto::chooseAction(const UpdatesPack &pack) {
         Direction directionDiag(-1, -1);
         return Message::actionMove(directionDiag);
 
-    } else {                          //if not a lot of energy
+    } else {                          //if the robot has not a lot of energy
         if (!boniDirections.empty()) {//if bonus in zone
             for (Direction direction: boniDirections) {
                 for (Direction directionRobot: robotsDirections) {
@@ -135,25 +141,23 @@ string Roboto::chooseAction(const UpdatesPack &pack) {
         }
     }
 
-    minEnergyLevel += (iteration % (20 / nbRobots) == 0) ? 1 : 0;
+    minEnergyLevel += (iteration % (20 / nbRobots) == 0) ? 1 : 0;//the minimum energy level gradually increases, as other robots are getting bonus of power
     iteration++;
 
     return Message::actionWait();
 }
 
 Direction Roboto::escapeDirection(const vector<Direction> &robotsDirections) {
-
-    //    Map touchingRobotsPerCells
-
-    vector<int> touchingRobotsPerCells;
-    vector<int> distantRobotsPerCells;
-    vector<Direction> cellDirections;
+    vector<int> touchingRobotsPerCells;//number of touching robots per cells around the center one
+    vector<int> distantRobotsPerCells; //same but for distant robots (2 cells away)
+    vector<Direction> movesDirections; //all 9 move directions (no move included)
 
     int numberOfTouchingRobotsForThisCell = 0;
     int numberOfDistantRobotsForThisCell = 0;
+    //For each possible move directions
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
-            cellDirections.push_back(Direction(i, j));
+            movesDirections.push_back(Direction(i, j));
             numberOfTouchingRobotsForThisCell = 0;
             for (auto rDirection: robotsDirections) {
                 Position robotPosition = Position(0, 0) + rDirection;
@@ -172,6 +176,7 @@ Direction Roboto::escapeDirection(const vector<Direction> &robotsDirections) {
 
     sort(touchingRobotsPerCells.begin(), touchingRobotsPerCells.end());
 
+    //Get the move direction
     size_t minIndex = 0;
     int minFound = touchingRobotsPerCells.at(0);
     size_t index = 0;
@@ -181,5 +186,6 @@ Direction Roboto::escapeDirection(const vector<Direction> &robotsDirections) {
         }
         index++;
     }
-    return cellDirections.at(minIndex);
+    //Take the cell with the minimum of robots around
+    return movesDirections.at(minIndex);
 }
