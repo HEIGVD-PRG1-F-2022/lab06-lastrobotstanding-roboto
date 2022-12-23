@@ -63,11 +63,11 @@ TODO remove this part.
 
 
 **Pseudocode of Roboto's strategy:**
-```
+```cpp
+int minEnergyLevel = 10;
+iteration = 0
 FUNCTION chooseAction()
-	iteration = 0
 	const float nbRobots = (size / 10)^2 //estimated number of robots (a bit under the real value)
-	int minEnergyLevel = 10;
 	IF energy > minEnergyLevel 
 		IF bonus in the zone
 			IF bonus is touching us

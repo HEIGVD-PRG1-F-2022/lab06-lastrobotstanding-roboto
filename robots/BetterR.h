@@ -2,13 +2,13 @@
 #ifndef BETTER_R_H
 #define BETTER_R_H
 
-#include "robots/Roboto.h"
+#include "Roboto.h"
 #include <librobots/Message.h>
 #include <string>
 #include <vector>
 
 
-class BetterR {
+class BetterR : public Roboto {
     std::string chooseAction(UpdatesPack pack);
 
 public:

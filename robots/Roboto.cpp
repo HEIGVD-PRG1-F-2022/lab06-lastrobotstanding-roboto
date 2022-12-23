@@ -1,8 +1,10 @@
 #include "Roboto.h"
 #include "librobots/Direction.h"
 #include "librobots/Message.h"
+#include <algorithm>
 #include <iostream>
 #include <random>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -22,7 +24,7 @@ UpdatesPack Roboto::receiveUpdates(const vector<string> &updates) {
 
     UpdatesPack pack = {.boardUpdate = boardUpdate};//create the pack with the boardUpdate (the only attribute that don't have a default constructor)
 
-    for (const string& update: updates) {
+    for (const string &update: updates) {
         Message message(update);
 
         //Extract UpdateBonus and UpdateDamage message for the pack (and apply damage)
@@ -53,7 +55,7 @@ string Roboto::name() const {
     return "Roboto";
 }
 
-string Roboto::chooseAction(const UpdatesPack& pack) {
+string Roboto::chooseAction(const UpdatesPack &pack) {
 
     const unsigned nbRobots = pow((width / 10), 2);
     vector<Direction> robotsDirections = pack.boardUpdate.robots;
@@ -134,7 +136,7 @@ string Roboto::chooseAction(const UpdatesPack& pack) {
     return Message::actionWait();
 }
 
-Direction Roboto::escapeDirection(const vector<Direction>& robotsDirections) {
+Direction Roboto::escapeDirection(const vector<Direction> &robotsDirections) {
 
     //    Map touchingRobotsPerCells
 

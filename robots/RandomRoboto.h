@@ -2,28 +2,22 @@
 // Created by s4rac on 30.11.2022.
 //
 
-#ifndef RANDOM_ROBOT_H
-#define RANDOM_ROBOT_H
+#ifndef RANDOM_ROBOTO_H
+#define RANDOM_ROBOTO_H
 
+#include "Roboto.h"
 #include <librobots/Message.h>
-#include <librobots/Robot.h>
 #include <string>
 #include <vector>
 
-class RandomRoboto {
-    size_t width, height;
-    unsigned energy, power;
-    // std::vector<std::vector<Case>> board;
-
-    //std::string chooseAction();
+class RandomRoboto : public Roboto {
+    std::string chooseAction(UpdatesPack pack);
 
 public:
     RandomRoboto() = default;
-    virtual void setConfig(size_t w, size_t h, unsigned e, unsigned p);
-    std::string action(std::vector<std::string> updates);//fonction: recoit les updates(string) de game, return l'action qu'il fait en conséquence
+    std::string action(std::vector<std::string> updates);
     [[nodiscard]] std::string name() const;
-    // Case readOnBoard(int relativeX, int relativeY);
 };
 
 
-#endif//RANDOM_ROBOT_H
+#endif//RANDOM_ROBOTO_H
