@@ -189,7 +189,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
         d.setColor(Display::Color::BLUE);
         d << "The game stopped because " << (100 * nbRobots) << " turns have happened without any attack...\n";
         if (displayMode) {
-            printStats();
+            printStats(iterationCount);
         }
     }
     if (displayMode) {
@@ -288,11 +288,12 @@ void Game::printBoard(unsigned iterationCount) {
     d << Display::displayGrid<Display::DString>(board, false);
     d.print();
 
-    cout << "Tour " << iterationCount << endl;
-    printStats();
+    printStats(iterationCount);
 }
 
-void Game::printStats() {
+void Game::printStats(unsigned iterationCount) {
+
+    cout << "Tour " << iterationCount << endl;
     ostringstream header;
 
     header << "ID "

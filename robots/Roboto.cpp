@@ -2,7 +2,6 @@
 #include "librobots/Direction.h"
 #include "librobots/Message.h"
 #include <algorithm>
-#include <iostream>
 #include <random>
 #include <string>
 #include <vector>
