@@ -46,7 +46,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
     const unsigned BONUS_MAX_ENERGY = 10;
     const unsigned BONUS_MAX_POWER = 3;
     vector<Position> positions;//list of positions of all living robots
-    vector<Position> boniPos;  //list of all positions of bonus
+    vector<Position> boniPositions;  //list of all positions of bonus
     size_t index = 0;
     vector<RobotState *> livingRobots;
 
@@ -62,13 +62,13 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
             positions.push_back(state->getPosition());
         }
         //Build a list of all bonus positions
-        boniPos.clear();
+        boniPositions.clear();
         for (auto b: boni) {
-            boniPos.push_back(b.pos);
+            boniPositions.push_back(b.pos);
         }
         //Call action() on all robots with the board update (other updates are already present in the RobotState object)
         index = 0;
-        vector<string> boardsAsString = Message::updateBoard(positions, boniPos);
+        vector<string> boardsAsString = Message::updateBoard(positions, boniPositions);
         for (RobotState *state: livingRobots) {
             //Send the board update with the own context for each robot, and ask for the action
             state->sendUpdate(boardsAsString.at(index));
@@ -142,7 +142,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
         for (RobotState *state: livingRobots) {
             Message message = state->getAction();
             if (message.msg == MessageType::ActionRadar) {
-                state->actionRadar(positions, boniPos);
+                state->actionRadar(positions, boniPositions);
                 //Send a robot update to all other robots (containing the direction of the robot running the radar)
                 for (RobotState *otherRobot: livingRobots) {
                     if (otherRobot != state) {
