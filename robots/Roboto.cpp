@@ -64,7 +64,7 @@ string Roboto::name() const {
 
 string Roboto::chooseAction(const UpdatesPack &pack) {
 
-    const unsigned nbRobots = pow((width / 10), 2);
+    const auto nbRobots = (unsigned) pow((width / 10), 2);
     vector<Direction> robotsDirections = pack.boardUpdate.robots;
     vector<Direction> boniDirections = pack.boardUpdate.boni;
     if (energy > minEnergyLevel) {//if a lot of energy
@@ -174,9 +174,9 @@ Direction Roboto::escapeDirection(const vector<Direction> &robotsDirections) {
 
     sort(touchingRobotsPerCells.begin(), touchingRobotsPerCells.end());
 
-    int minIndex = 0;
+    size_t minIndex = 0;
     int minFound = touchingRobotsPerCells.at(0);
-    int index = 0;
+    size_t index = 0;
     for (auto count: touchingRobotsPerCells) {
         if (count < minFound) {
             minIndex = index;

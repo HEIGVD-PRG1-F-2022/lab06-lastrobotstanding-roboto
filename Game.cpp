@@ -20,9 +20,7 @@ Description     : Last Robot Standing
 #include <librobots/Direction.h>
 #include <librobots/Message.h>
 #include <librobots/Position.h>
-#include <librobots/Robot.h>
 #include <librobots/RobotState.h>
-#include <random>
 #include <sstream>
 #include <string>
 #include <thread>

@@ -9,7 +9,6 @@ Description     : Last Robot Standing
 #include "Game.h"
 #include "helper.h"
 
-#include <ctime>
 #include <map>
 #include <string>
 #include <vector>

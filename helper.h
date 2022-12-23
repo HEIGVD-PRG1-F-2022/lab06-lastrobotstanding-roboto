@@ -10,9 +10,10 @@ Description     : Last Robot Standing
 #define HELPER_H
 #include <string>
 
+//Generate a random number in the interval [min; max[ (max excluded)
 int getRandomNumber(int min, int max);
 
-//TODO: were should we place this declaration ?
+//RobotPack used to inform the game how much robots must be created on the board
 struct RobotPack {
     std::string className;
     int number;
