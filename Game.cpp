@@ -57,8 +57,8 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
     const std::chrono::milliseconds SLEEP_TIME_BETWEEN_LOOP(100);
     const unsigned BONUS_MAX_ENERGY = 10;
     const unsigned BONUS_MAX_POWER = 3;
-    vector<Position> positions;//list of positions of all living robots
-    vector<Position> boniPositions;  //list of all positions of bonus
+    vector<Position> positions;    //list of positions of all living robots
+    vector<Position> boniPositions;//list of all positions of bonus
     size_t index = 0;
     vector<RobotState *> livingRobots;
 
@@ -167,7 +167,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
         //Generate new bonus each 20/nbRobots iteration (iterationCount starts at 1 to avoid having a bonus for the first iteration)
         if (iterationCount % (20 / nbRobots) == 0) {
             BonusType type = (getRandomNumber(0, 2) == 0 ? BonusType::Energy
-                                                         : BonusType::Power);           //Choose randomly the type of bonus (energy or power)
+                                                         : BonusType::Power);//Choose randomly the type of bonus (energy or power)
             Bonus bonus(size, size, (type == BonusType::Energy ? BONUS_MAX_ENERGY : BONUS_MAX_POWER),
                         type);//Create the bonus with a random maximum (depending on the bonus type)
             boni.push_back(bonus);
@@ -209,6 +209,7 @@ string Game::start(vector<RobotPack> robotPacks, bool displayMode) {
     if (displayMode) {
         d.print();
     }
+    return winner;
 }
 
 void Game::generateRobots(const vector<RobotPack> &robotPacks) {

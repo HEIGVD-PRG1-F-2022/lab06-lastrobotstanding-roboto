@@ -76,11 +76,6 @@ classDiagram
 
 *Note: Mermaid doesn't support nested types (so `vector vector<string> structure` is given as a replacement of `vector<vector<string>> structure`).*
 
-### Enums
-```cpp
-enum Case { EMPTY, SELF, OTHER, BONUS };
-```
-
 ### Struct
 ```cpp
 struct UpdatesPack {
