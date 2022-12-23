@@ -1,3 +1,11 @@
+/*
+-----------------------------------------------------------------------------------
+Nom du fichier  : main.cpp
+Auteur(s)       : Samuel Roland, Sara Camassa
+Date creation   : 29.11.2022
+Description     : Last Robot Standing
+-----------------------------------------------------------------------------------
+*/
 #include "Game.h"
 #include "helper.h"
 #include <libdio/display.h>

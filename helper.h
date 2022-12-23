@@ -1,3 +1,11 @@
+/*
+-----------------------------------------------------------------------------------
+Nom du fichier  : helper.h
+Auteur(s)       : Samuel Roland, Sara Camassa
+Date creation   : 29.11.2022
+Description     : Last Robot Standing
+-----------------------------------------------------------------------------------
+*/
 #ifndef HELPER_H
 #define HELPER_H
 #include <string>

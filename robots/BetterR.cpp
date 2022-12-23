@@ -1,3 +1,11 @@
+/*
+-----------------------------------------------------------------------------------
+Nom du fichier  : BetterR.cpp
+Auteur(s)       : Samuel Roland, Sara Camassa
+Date creation   : 29.11.2022
+Description     : Last Robot Standing
+-----------------------------------------------------------------------------------
+*/
 #include "BetterR.h"
 #include "Roboto.h"
 #include "librobots/Direction.h"

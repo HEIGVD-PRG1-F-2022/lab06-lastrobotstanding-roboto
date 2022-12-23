@@ -1,7 +1,11 @@
-//
-// Created by s4rac on 30.11.2022.
-//
-
+/*
+-----------------------------------------------------------------------------------
+Nom du fichier  : Roboto.h
+Auteur(s)       : Samuel Roland, Sara Camassa
+Date creation   : 29.11.2022
+Description     : Last Robot Standing
+-----------------------------------------------------------------------------------
+*/
 #ifndef REFACTOR_ROBOTO_H
 #define REFACTOR_ROBOTO_H
 

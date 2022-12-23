@@ -1,3 +1,11 @@
+/*
+-----------------------------------------------------------------------------------
+Nom du fichier  : Roboto.cpp
+Auteur(s)       : Samuel Roland, Sara Camassa
+Date creation   : 29.11.2022
+Description     : Last Robot Standing
+-----------------------------------------------------------------------------------
+*/
 #include "Roboto.h"
 #include "librobots/Direction.h"
 #include "librobots/Message.h"
